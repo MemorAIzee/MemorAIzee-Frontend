@@ -8,7 +8,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   flex-direction: row;
   justify-content: center;
-  box-shadow: 0 8px 6px -6px #00000029; /* 그림자 효과 추가 */
+  box-shadow: 0 8px 6px -6px #00000029;
 `;
 
 const NavContainer = styled.div`
