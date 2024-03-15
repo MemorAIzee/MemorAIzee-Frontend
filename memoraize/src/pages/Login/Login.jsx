@@ -43,8 +43,13 @@ const InputField = styled.input`
 `;
 
 const LoginText = styled.p`
+  color: #000;
+  font-family: Pretendard;
   font-size: 3vw;
+  font-style: normal;
   font-weight: 700;
+  line-height: normal;
+  text-transform: capitalize;
 `;
 
 const FindText = styled.p`
