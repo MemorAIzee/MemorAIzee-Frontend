@@ -139,8 +139,8 @@ const Login = () => {
             <SimpleStroke />
           </Simplecontainer>
           <KakaoContainer>
-            <img src={kakao} style={{ width: '2vw', height: '2vw' }} />
-            <img src={kakao} style={{ width: '2vw', height: '2vw' }} />
+            <img src={kakao} style={{ width: '2.6vw', height: '2.6vw' }} />
+            <img src={kakao} style={{ width: '2.6vw', height: '2.6vw' }} />
           </KakaoContainer>
         </LoginContainer>
       </Container>
