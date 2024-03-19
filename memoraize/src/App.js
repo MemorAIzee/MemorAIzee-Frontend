@@ -9,6 +9,7 @@ import Creates1 from './pages/Album/Creates1';
 import Creates2 from './pages/Album/Creates2';
 import Creates3 from './pages/Album/Creates3';
 import Creates4 from './pages/Album/Creates4';
+import Viewreview from './pages/Review/Viewreview';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="Creates2" element={<Creates2 />} />
           <Route path="Creates3" element={<Creates3 />} />
           <Route path="Creates4" element={<Creates4 />} />
+          <Route path="Viewreview" element={<Viewreview />} />
         </Routes>
       </Router>
     </>
