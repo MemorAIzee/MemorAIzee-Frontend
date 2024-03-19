@@ -3,7 +3,6 @@ import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/CircleLine.png';
 import { useNavigate } from 'react-router-dom';
-
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -105,12 +104,17 @@ const ButtonContainer = styled.div`
   margin-top: 4.5vw;
 `;
 
-const Creates1 = () => {
+const Creates2 = () => {
   const navigate = useNavigate();
 
-  const goToCreates2 = () => {
-    navigate('/creates2');
+  const goToCreates1 = () => {
+    navigate('/creates1');
   };
+
+  const goToCreates3 = () => {
+    navigate('/creates3');
+  };
+
   return (
     <>
       <Header />
@@ -121,13 +125,16 @@ const Creates1 = () => {
         <CreatesContainer>
           <img src={CircleLine} style={{ width: '42.4vw', height: '1.6vw' }} />
           <CreateContainer>
-            <NameText>앨범 이름</NameText>
-            <AlbumField placeholder="앨범 이름을 입력해주세요"></AlbumField>
-            <RequiredText>*최대 20자 이내</RequiredText>
+            <NameText>앨범 설명</NameText>
+            <AlbumField
+              placeholder="앨범 설명을 입력해주세요"
+              maxLength={50}
+            ></AlbumField>
+            <RequiredText>*최대 50자 이내</RequiredText>
           </CreateContainer>
           <ButtonContainer>
-            <CancelButton>취소하기</CancelButton>
-            <SubmitButton onClick={goToCreates2}>다음으로</SubmitButton>
+            <CancelButton onClick={goToCreates1}>이전으로</CancelButton>
+            <SubmitButton onClick={goToCreates3}>다음으로</SubmitButton>
           </ButtonContainer>
         </CreatesContainer>
       </Container>
@@ -135,4 +142,4 @@ const Creates1 = () => {
   );
 };
 
-export default Creates1;
+export default Creates2;

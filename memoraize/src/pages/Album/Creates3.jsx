@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/CircleLine.png';
 import { useNavigate } from 'react-router-dom';
+import Photocamera from '../../assets/images/Photo camera.png';
 
 const Container = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const CreateContainer = styled.div`
   flex-direction: column;
 `;
 
-const AlbumField = styled.input`
+const PhotoAddContainer = styled.div`
   width: 42.4vw;
   height: 3.2vw;
   flex-shrink: 0;
@@ -53,9 +54,20 @@ const AlbumField = styled.input`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  padding-left: 1.35vw;
+  padding: 0 0.8vw 0 1.2vw;
   margin-bottom: 1vw;
+  display: flex;
+  justify-content: space-between; /* 왼쪽과 오른쪽 요소 사이에 공간을 균등하게 분배 */
+  align-items: center;
 `;
+
+const PhotoIcon = styled.img`
+  cursor: pointer; /* 클릭 가능한 아이콘 표시 */
+  width: 1.6vw;
+  height: 1.6vw;
+`;
+
+const AlbumField = styled.input``;
 
 const RequiredText = styled.p`
   color: var(--5, #707070);
@@ -105,12 +117,33 @@ const ButtonContainer = styled.div`
   margin-top: 4.5vw;
 `;
 
-const Creates1 = () => {
+const PhotoSelectText = styled.p`
+  color: var(--3, #a0a0a0);
+  font-family: Pretendard;
+  font-size: 1vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+const HiddenFileInput = styled.input`
+  display: none;
+`;
+
+const Creates3 = () => {
   const navigate = useNavigate();
 
   const goToCreates2 = () => {
     navigate('/creates2');
   };
+
+  const goToCreates4 = () => {
+    navigate('/Creates4');
+  };
+  const triggerFileSelect = () => {
+    document.getElementById('photoUpload').click();
+  };
+
   return (
     <>
       <Header />
@@ -121,13 +154,16 @@ const Creates1 = () => {
         <CreatesContainer>
           <img src={CircleLine} style={{ width: '42.4vw', height: '1.6vw' }} />
           <CreateContainer>
-            <NameText>앨범 이름</NameText>
-            <AlbumField placeholder="앨범 이름을 입력해주세요"></AlbumField>
-            <RequiredText>*최대 20자 이내</RequiredText>
+            <NameText>사진 추가하기</NameText>
+            <PhotoAddContainer>
+              <PhotoSelectText>사진을 선택해주세요</PhotoSelectText>
+              <PhotoIcon src={Photocamera} onClick={triggerFileSelect} />
+              <HiddenFileInput type="file" id="photoUpload" accept="image/*" />
+            </PhotoAddContainer>
           </CreateContainer>
           <ButtonContainer>
-            <CancelButton>취소하기</CancelButton>
-            <SubmitButton onClick={goToCreates2}>다음으로</SubmitButton>
+            <CancelButton onClick={goToCreates2}>취소하기</CancelButton>
+            <SubmitButton onClick={goToCreates4}>다음으로</SubmitButton>
           </ButtonContainer>
         </CreatesContainer>
       </Container>
@@ -135,4 +171,4 @@ const Creates1 = () => {
   );
 };
 
-export default Creates1;
+export default Creates3;
