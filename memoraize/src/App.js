@@ -10,6 +10,7 @@ import Creates2 from './pages/Album/Creates2';
 import Creates3 from './pages/Album/Creates3';
 import Creates4 from './pages/Album/Creates4';
 import Viewreview from './pages/Review/Viewreview';
+import Writereview from './pages/Review/Writereview';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="Creates3" element={<Creates3 />} />
           <Route path="Creates4" element={<Creates4 />} />
           <Route path="Viewreview" element={<Viewreview />} />
+          <Route path="Writereview" element={<Writereview />} />
         </Routes>
       </Router>
     </>
