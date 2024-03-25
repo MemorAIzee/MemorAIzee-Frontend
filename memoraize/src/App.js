@@ -11,6 +11,7 @@ import Creates3 from './pages/Album/Creates3';
 import Creates4 from './pages/Album/Creates4';
 import Viewreview from './pages/Review/Viewreview';
 import Writereview from './pages/Review/Writereview';
+import Home from './pages/Home/Home';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       <GlobalStyle />
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="Creates1" element={<Creates1 />} />
