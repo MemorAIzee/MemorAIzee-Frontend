@@ -17,7 +17,6 @@ const CreatesContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 60%;
-  background-color: red;
   padding-top: 5vw;
   padding-bottom: 5vw;
 `;
