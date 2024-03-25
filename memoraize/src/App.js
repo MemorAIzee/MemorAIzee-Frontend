@@ -12,6 +12,7 @@ import Creates4 from './pages/Album/Creates4';
 import Viewreview from './pages/Review/Viewreview';
 import Writereview from './pages/Review/Writereview';
 import Home from './pages/Home/Home';
+import Mypage from './pages/Mypage/Mypage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="Creates4" element={<Creates4 />} />
           <Route path="Viewreview" element={<Viewreview />} />
           <Route path="Writereview" element={<Writereview />} />
+          <Route path="/Mypage" element={<Mypage />} />
         </Routes>
       </Router>
     </>
