@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header';
 import HomeBanner from '../../assets/images/HomeBanner.png';
 import Travelog from '../../components/Travelog/Travelog';
 import FriendAlbum from '../../components/FriendAlbum/FriendAlbum';
+import MemoryCut from '../../components/MemoryCut/MemoryCut';
 const BannerContainer = styled.div`
   width: 100%;
   height: 27vw;
@@ -27,6 +28,7 @@ const Home = () => {
       <Container>
         <Travelog />
         <FriendAlbum />
+        <MemoryCut />
       </Container>
     </>
   );

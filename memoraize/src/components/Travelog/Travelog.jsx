@@ -15,7 +15,6 @@ const CreatesContainer = styled.div`
   margin-bottom: 7.5vw;
   height: 72vw;
   align-items: center;
-  background-color: yellow;
 `;
 
 const Travelo = styled.p`

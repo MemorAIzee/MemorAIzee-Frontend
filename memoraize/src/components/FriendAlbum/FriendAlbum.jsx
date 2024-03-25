@@ -27,10 +27,8 @@ const CreatesContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 60%;
-  margin-bottom: 7.5vw;
-  height: 72vw;
+  height: 89vw;
   align-items: center;
-  background-color: pink;
 `;
 
 const FriendsContainer = styled.div`
@@ -55,7 +53,7 @@ const AlbumContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  margin-bottom: 7.4vw;
+  margin-bottom: ${(props) => (props.isLast ? '0' : '7.4vw')};
 `;
 
 const AlbumDetail = styled.div`
