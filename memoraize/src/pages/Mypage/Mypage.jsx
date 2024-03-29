@@ -86,6 +86,20 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+const TravelContainer = styled.div`
+  display: flex;
+  align-self: flex-start;
+`;
+
+const Travelo = styled.p`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 1.8vw;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+`;
+
 const Mypage = () => {
   return (
     <>
@@ -134,8 +148,14 @@ const Mypage = () => {
       </MypageContainer>
 
       <Container>
-        <Travelog />
-        <Review />
+        <Travelog title="My Album" />
+
+        <CreatesContainer style={{ paddingTop: '0vw' }}>
+          <TravelContainer>
+            <Travelo>My Reviews</Travelo>
+          </TravelContainer>
+          <Review />
+        </CreatesContainer>
       </Container>
     </>
   );

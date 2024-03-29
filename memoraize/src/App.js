@@ -13,6 +13,7 @@ import Viewreview from './pages/Review/Viewreview';
 import Writereview from './pages/Review/Writereview';
 import Home from './pages/Home/Home';
 import Mypage from './pages/Mypage/Mypage';
+import Search from './pages/Search/Search';
 
 function App() {
   return (
@@ -24,13 +25,14 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Profile" element={<Profile />} />
-          <Route path="Creates1" element={<Creates1 />} />
-          <Route path="Creates2" element={<Creates2 />} />
-          <Route path="Creates3" element={<Creates3 />} />
-          <Route path="Creates4" element={<Creates4 />} />
-          <Route path="Viewreview" element={<Viewreview />} />
-          <Route path="Writereview" element={<Writereview />} />
+          <Route path="/Creates1" element={<Creates1 />} />
+          <Route path="/Creates2" element={<Creates2 />} />
+          <Route path="/Creates3" element={<Creates3 />} />
+          <Route path="/Creates4" element={<Creates4 />} />
+          <Route path="/Viewreview" element={<Viewreview />} />
+          <Route path="/Writereview" element={<Writereview />} />
           <Route path="/Mypage" element={<Mypage />} />
+          <Route path="/Search" element={<Search />} />
         </Routes>
       </Router>
     </>

@@ -8,7 +8,7 @@ import review2 from '../../assets/images/reviewimage1.png';
 import review3 from '../../assets/images/reviewimage2.png';
 
 const ReviewContainer = styled.div`
-  margin-top: 5vw;
+  margin-top: 2vw;
   display: flex;
   flex-direction: row;
   gap: 1.4vw;

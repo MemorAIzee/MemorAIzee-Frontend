@@ -38,6 +38,7 @@ const Album = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 2vw;
+  width: calc((100% - 4.4vw) / 3);
 `;
 
 const Detail = styled.div`
@@ -97,12 +98,12 @@ const AlbumData = [
   { id: 6, title: '앨범제목 6', date: '생성일 6', hashtag: '#해시태그6' },
 ];
 
-const Travelog = () => {
+const Travelog = ({ title = 'Travelog' }) => {
   return (
     <>
       <CreatesContainer>
         <TravelContainer>
-          <Travelo>Travelog</Travelo>
+          <Travelo>{title}</Travelo>
         </TravelContainer>
         <AlbumContainer>
           {AlbumData.map((album) => (
