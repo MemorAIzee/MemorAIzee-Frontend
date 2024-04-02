@@ -27,7 +27,7 @@ const RowContainer = styled.div`
 `;
 
 const Text = styled.p`
-  color: #000;
+  color: ${(props) => (props.isSelected ? '#000' : 'var(--5, #707070)')};
   font-family: Pretendard;
   font-size: 1.2vw;
   font-style: normal;
@@ -49,7 +49,6 @@ const CreatesContainer = styled.div`
   width: 60%;
   height: 42vw;
   align-items: center;
-  background-color: yellow;
 `;
 
 const TitleContainer = styled.div`
@@ -110,6 +109,24 @@ const SearchData = {
   ],
 };
 
+const TextContainer = styled.div`
+  position: relative;
+  margin-bottom: 10px; // 선택된 항목과 이미지 사이의 공간 조정
+  cursor: pointer;
+
+  // 선택된 항목 아래의 파란색 줄을 추가합니다.
+  &::after {
+    content: '';
+    display: ${(props) => (props.isSelected ? 'block' : 'none')};
+    position: absolute;
+    bottom: -27.5px; // 하단 테두리 위치 조정
+    left: -5px;
+    width: 130%;
+    border-bottom: 2px solid #5e81ff;
+    stroke-width: 3px;
+  }
+`;
+
 const Search = () => {
   const [selectedCategory, setSelectedCategory] = useState('title'); // 기본 선택 카테고리
 
@@ -127,11 +144,32 @@ const Search = () => {
       <Container>
         <CreatesContainer>
           <RowContainer>
-            <Text onClick={() => setSelectedCategory('title')}>제목</Text>
-            <Text onClick={() => setSelectedCategory('tag')}>태그</Text>
-            <Text onClick={() => setSelectedCategory('user')}>사용자</Text>
-            <Text onClick={() => setSelectedCategory('place')}>장소</Text>
+            <TextContainer
+              isSelected={selectedCategory === 'title'}
+              onClick={() => setSelectedCategory('title')}
+            >
+              <Text isSelected={selectedCategory === 'title'}>제목</Text>
+            </TextContainer>
+            <TextContainer
+              isSelected={selectedCategory === 'tag'}
+              onClick={() => setSelectedCategory('tag')}
+            >
+              <Text isSelected={selectedCategory === 'tag'}>태그</Text>
+            </TextContainer>
+            <TextContainer
+              isSelected={selectedCategory === 'user'}
+              onClick={() => setSelectedCategory('user')}
+            >
+              <Text isSelected={selectedCategory === 'user'}>사용자</Text>
+            </TextContainer>
+            <TextContainer
+              isSelected={selectedCategory === 'place'}
+              onClick={() => setSelectedCategory('place')}
+            >
+              <Text isSelected={selectedCategory === 'place'}>장소</Text>
+            </TextContainer>
           </RowContainer>
+
           <img src={RowLine} style={{ width: '59vw' }} alt="Row Line" />
           {SearchData[selectedCategory].map((item, index) => (
             <TitleContainer key={index}>

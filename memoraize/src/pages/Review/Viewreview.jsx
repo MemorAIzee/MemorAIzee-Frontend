@@ -19,7 +19,7 @@ const CreatesContainer = styled.div`
   width: 60%;
   margin-top: 7.65vw;
   margin-bottom: 7.5vw;
-  height: 25vw;
+  height: 50vw;
   align-items: center;
 `;
 

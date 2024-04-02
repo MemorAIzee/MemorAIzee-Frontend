@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { NavLink, Link } from 'react-router-dom';
 import Logo from '../../assets/images/Logo.png';
+import { useNavigate } from 'react-router-dom';
+
 const HeaderContainer = styled.div`
   width: 100%;
   height: 8vw;
@@ -78,11 +80,13 @@ const Logotitle = styled.p`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <HeaderContainer>
         <NavContainer>
-          <HeaderLogo>
+          <HeaderLogo onClick={() => navigate('/')}>
             <img src={Logo} style={{ width: '5.2vw', height: '5.2vw' }} />
             <Logotitle>MEMORAIZE</Logotitle>
           </HeaderLogo>
@@ -92,7 +96,7 @@ const Header = () => {
           <StyledNavLink to="/Creates1">앨범생성</StyledNavLink>
           <StyledNavLink to="/Viewreview">리뷰</StyledNavLink>
           <StyledNavLink to="/Mypage">마이페이지</StyledNavLink>
-          <SearchBarContainer>
+          <SearchBarContainer onClick={() => navigate('/search')}>
             <SearchInput />
             <SearchIcon>
               <svg

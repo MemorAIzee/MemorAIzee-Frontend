@@ -14,6 +14,7 @@ import Writereview from './pages/Review/Writereview';
 import Home from './pages/Home/Home';
 import Mypage from './pages/Mypage/Mypage';
 import Search from './pages/Search/Search';
+import Detailreview from './pages/Review/Detailreview';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/Writereview" element={<Writereview />} />
           <Route path="/Mypage" element={<Mypage />} />
           <Route path="/Search" element={<Search />} />
+          <Route path="/Detailreview" element={<Detailreview />} />
         </Routes>
       </Router>
     </>
