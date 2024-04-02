@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
-import CircleLine from '../../assets/images/CircleLine.png';
+import CircleLine from '../../assets/images/creates2.png';
 import { useNavigate } from 'react-router-dom';
 const Container = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ const SubmitButton = styled.button`
   height: 2.8vw;
   flex-shrink: 0;
   border-radius: 0.2vw;
-  background: #0034ed;
+  background: #5e81ff;
   color: #fff;
   font-family: Pretendard;
   font-size: 0.8vw;

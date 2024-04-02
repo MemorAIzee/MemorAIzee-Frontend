@@ -42,7 +42,7 @@ const Album = styled.div`
 `;
 
 const Detail = styled.div`
-  width: 18.5vw;
+  width: 100%;
   height: 7.4vw;
   flex-shrink: 0;
   background: #f5f5f5;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
-import CircleLine from '../../assets/images/CircleLine.png';
+import CircleLine from '../../assets/images/creates1.png';
 import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
@@ -86,7 +86,7 @@ const SubmitButton = styled.button`
   height: 2.8vw;
   flex-shrink: 0;
   border-radius: 0.2vw;
-  background: #0034ed;
+  background: #5e81ff;
   color: #fff;
   font-family: Pretendard;
   font-size: 0.8vw;
@@ -105,6 +105,35 @@ const ButtonContainer = styled.div`
   margin-top: 4.5vw;
 `;
 
+const BannerText = styled.p`
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 2.5vw;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+`;
+
+const StyledBannerContainer = styled.div`
+  width: 100%;
+  height: 27vw;
+  background-image: url(${CreateBanner});
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  gap: 2vw;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Creates1 = () => {
   const navigate = useNavigate();
 
@@ -114,9 +143,12 @@ const Creates1 = () => {
   return (
     <>
       <Header />
-      <BannerContainer>
-        <img src={CreateBanner} style={{ width: '100%', height: '27vw' }} />
-      </BannerContainer>
+      <StyledBannerContainer>
+        <TextContainer>
+          <BannerText>여행의 순간을 담아</BannerText>
+          <BannerText>당신만의 여행 앨범을 만들어보세요.</BannerText>
+        </TextContainer>
+      </StyledBannerContainer>
       <Container>
         <CreatesContainer>
           <img src={CircleLine} style={{ width: '42.4vw', height: '1.6vw' }} />
