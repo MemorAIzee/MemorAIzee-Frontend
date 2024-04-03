@@ -174,6 +174,35 @@ const DropdownItem = styled.div`
   }
 `;
 
+const BannerText = styled.p`
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 2.5vw;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+`;
+
+const StyledBannerContainer = styled.div`
+  width: 100%;
+  height: 27vw;
+  background-image: url(${CreateBanner});
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  gap: 2vw;
+  align-items: center;
+  justify-content: center;
+`;
+
 const ShareOption = styled.option``;
 
 const Creates4 = () => {
@@ -199,9 +228,12 @@ const Creates4 = () => {
   return (
     <>
       <Header />
-      <BannerContainer>
-        <img src={CreateBanner} style={{ width: '100%', height: '27vw' }} />
-      </BannerContainer>
+      <StyledBannerContainer>
+        <TextContainer>
+          <BannerText>여행의 순간을 담아</BannerText>
+          <BannerText>당신만의 여행 앨범을 만들어보세요.</BannerText>
+        </TextContainer>
+      </StyledBannerContainer>
       <Container>
         <CreatesContainer>
           <img src={CircleLine} style={{ width: '42.4vw', height: '1.6vw' }} />

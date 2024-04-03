@@ -4,7 +4,8 @@ import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/creates3.png';
 import { useNavigate } from 'react-router-dom';
 import Photocamera from '../../assets/images/Photo camera.png';
-
+import Cancel from '../../assets/images/Cancel.png';
+import { useState } from 'react';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -130,8 +131,68 @@ const HiddenFileInput = styled.input`
   display: none;
 `;
 
+const BannerText = styled.p`
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 2.5vw;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+`;
+
+const StyledBannerContainer = styled.div`
+  width: 100%;
+  height: 27vw;
+  background-image: url(${CreateBanner});
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  gap: 2vw;
+  align-items: center;
+  justify-content: center;
+`;
+
+const RowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1.3vw;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 42.4vw;
+  justify-content: flex-start;
+`;
+
+const SelectedPhoto = styled.div`
+  max-width: calc(
+    (100% / 6) - 1vw
+  ); // 한 줄에 최대 6개의 항목이 들어가도록 최대 너비 설정
+  height: 6vw;
+  border: 1px solid #e1e1e1;
+  background: #f7f7f7;
+  position: relative;
+  margin-bottom: 1.3vw;
+`;
+
+const CancelIcon = styled.img`
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 0.8vw;
+  height: 0.8vw;
+  cursor: pointer;
+`;
+
 const Creates3 = () => {
   const navigate = useNavigate();
+  const [selectedPhotos, setSelectedPhotos] = useState([]);
 
   const goToCreates2 = () => {
     navigate('/creates2');
@@ -143,13 +204,24 @@ const Creates3 = () => {
   const triggerFileSelect = () => {
     document.getElementById('photoUpload').click();
   };
+  // 파일이 선택되었을 때 호출될 함수
+  const handleFileSelect = (event) => {
+    const files = event.target.files;
+    const newPhotos = Array.from(files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setSelectedPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
+  };
 
   return (
     <>
       <Header />
-      <BannerContainer>
-        <img src={CreateBanner} style={{ width: '100%', height: '27vw' }} />
-      </BannerContainer>
+      <StyledBannerContainer>
+        <TextContainer>
+          <BannerText>여행의 순간을 담아</BannerText>
+          <BannerText>당신만의 여행 앨범을 만들어보세요.</BannerText>
+        </TextContainer>
+      </StyledBannerContainer>
       <Container>
         <CreatesContainer>
           <img src={CircleLine} style={{ width: '42.4vw', height: '1.6vw' }} />
@@ -158,8 +230,34 @@ const Creates3 = () => {
             <PhotoAddContainer>
               <PhotoSelectText>사진을 선택해주세요</PhotoSelectText>
               <PhotoIcon src={Photocamera} onClick={triggerFileSelect} />
-              <HiddenFileInput type="file" id="photoUpload" accept="image/*" />
+              <HiddenFileInput
+                type="file"
+                id="photoUpload"
+                accept="image/*"
+                onChange={handleFileSelect}
+                multiple
+              />
             </PhotoAddContainer>
+            <RowContainer>
+              {selectedPhotos.map((photo, index) => (
+                <SelectedPhoto key={index}>
+                  <img
+                    src={photo}
+                    alt={`Selected ${index}`}
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                  <CancelIcon
+                    src={Cancel}
+                    alt="Cancel"
+                    onClick={() => {
+                      setSelectedPhotos((prevPhotos) =>
+                        prevPhotos.filter((_, i) => i !== index)
+                      );
+                    }}
+                  />
+                </SelectedPhoto>
+              ))}
+            </RowContainer>
           </CreateContainer>
           <ButtonContainer>
             <CancelButton onClick={goToCreates2}>취소하기</CancelButton>
