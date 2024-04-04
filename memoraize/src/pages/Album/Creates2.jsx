@@ -46,7 +46,6 @@ const AlbumField = styled.input`
   border: 1px solid #e1e1e1;
   background: #f7f7f7;
   margin-top: 1.6vw;
-  color: var(--3, #a0a0a0);
   font-family: Pretendard;
   font-size: 1vw;
   font-style: normal;
@@ -54,6 +53,11 @@ const AlbumField = styled.input`
   line-height: normal;
   padding-left: 1.35vw;
   margin-bottom: 1vw;
+  color: #000;
+
+  ::placeholder {
+    color: var(--3, #a0a0a0);
+  }
 `;
 
 const RequiredText = styled.p`

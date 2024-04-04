@@ -15,6 +15,7 @@ import Home from './pages/Home/Home';
 import Mypage from './pages/Mypage/Mypage';
 import Search from './pages/Search/Search';
 import Detailreview from './pages/Review/Detailreview';
+import Created from './pages/Album/Created';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/Mypage" element={<Mypage />} />
           <Route path="/Search" element={<Search />} />
           <Route path="/Detailreview" element={<Detailreview />} />
+          <Route path="/Created" element={<Created />} />
         </Routes>
       </Router>
     </>
