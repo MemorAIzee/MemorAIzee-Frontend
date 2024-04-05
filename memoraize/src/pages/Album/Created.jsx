@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Danang from '../../assets/images/danang.png';
 import LeftButtonImage from '../../assets/images/leftbutton.png';
 import RightButtonImage from '../../assets/images/rightbutton.png';
+import AlbumPhoto from '../../components/AlbumPhoto/AlbumPhoto';
 
 const Container = styled.div`
   display: flex;
@@ -15,7 +16,7 @@ const CreatesContainer = styled.div`
   width: 65%;
   margin-top: 5.4vw;
   margin-bottom: 7.5vw;
-  height: 50vw;
+  height: 22vw;
   align-items: center;
   background-color: yellow;
 `;
@@ -97,7 +98,6 @@ const RightButton = styled.img`
   margin-left: -2vw;
 `;
 
-
 const Created = () => {
   return (
     <>
@@ -120,9 +120,14 @@ const Created = () => {
               style={{ width: '100%', height: '21.2vw' }}
               alt="Danang"
             />
+            <FlexContainer>
+              <RightButton src={RightButtonImage} alt="Right Button" />
+            </FlexContainer>
           </RowContainer>
         </CreatesContainer>
       </Container>
+
+      <AlbumPhoto />
     </>
   );
 };
