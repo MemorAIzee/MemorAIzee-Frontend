@@ -9,10 +9,42 @@ import Call from '../../assets/images/Call.png';
 import ETC from '../../assets/images/More horiz.png';
 import Map from '../../components/Map/Map';
 import { useParams } from 'react-router-dom';
+import LeftButtonImage from '../../assets/images/leftbutton.png';
+import RightButtonImage from '../../assets/images/rightbutton.png';
+
+const LeftButton = styled.img`
+  flex-shrink: 0;
+  width: 3.9vw;
+  height: 3.9vw;
+  position: absolute;
+  left: -2.7%;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+const RightButton = styled.img`
+  position: absolute;
+  right: -2.7%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3.9vw;
+  height: 3.9vw;
+`;
 
 const BannerContainer = styled.div`
+  display: flex;
   width: 100%;
   height: 27vw;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ImgContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 100%;
+  position: relative;
 `;
 
 const Container = styled.div`
@@ -108,7 +140,11 @@ const Detailreview = () => {
     <>
       <Header />
       <BannerContainer>
-        <img src={RevieweBanner} style={{ width: '100%', height: '27vw' }} />
+        <ImgContainer>
+          <LeftButton src={LeftButtonImage} alt="Left Button" />
+          <img src={RevieweBanner} style={{ width: '100%', height: '27vw' }} />
+          <RightButton src={RightButtonImage} alt="Right Button" />
+        </ImgContainer>
       </BannerContainer>
       <Container>
         <CreatesContainer>
