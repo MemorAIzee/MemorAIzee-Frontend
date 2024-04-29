@@ -2,6 +2,7 @@ import Header from '../../components/Header/Header';
 import styled from 'styled-components';
 import RevieweBanner from '../../assets/images/ReviewBanner.png';
 import Review from '../../components/Review/Review';
+import { Link } from 'react-router-dom';
 
 const BannerContainer = styled.div`
   width: 100%;

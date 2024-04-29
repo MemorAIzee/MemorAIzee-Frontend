@@ -1,6 +1,14 @@
 import styled from 'styled-components';
 import FriendsImage from '../../assets/images/friendsimage.png';
 import Share from '../../assets/images/share.png';
+import { Link } from 'react-router-dom';
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  width: 100%;
+`;
 
 const TextContainer = styled.div`
   display: flex;
@@ -117,25 +125,27 @@ const FriendAlbum = () => {
           <FriendsP>Friends Album</FriendsP>
         </FriendsContainer>
         {AlbumData.map((album) => (
-          <AlbumContainer key={album.id}>
-            <img
-              src={FriendsImage}
-              style={{ width: '40vw', height: '20vw' }}
-              alt="Album"
-            />
-            <AlbumDetail>
-              <RowContainer>
-                <FriendsTitle>{album.title}</FriendsTitle>
-                <img
-                  src={Share}
-                  style={{ width: '0.8vw', height: '0.9vw' }}
-                  alt="Share"
-                />
-              </RowContainer>
-              <CreateDate>{album.date}</CreateDate>
-              <HashTag>{album.hashtag}</HashTag>
-            </AlbumDetail>
-          </AlbumContainer>
+          <StyledLink to={`/created/${album.id}`} key={album.id}>
+            <AlbumContainer>
+              <img
+                src={FriendsImage}
+                style={{ width: '40vw', height: '20vw' }}
+                alt="Album"
+              />
+              <AlbumDetail>
+                <RowContainer>
+                  <FriendsTitle>{album.title}</FriendsTitle>
+                  <img
+                    src={Share}
+                    style={{ width: '0.8vw', height: '0.9vw' }}
+                    alt="Share Icon"
+                  />
+                </RowContainer>
+                <CreateDate>{album.date}</CreateDate>
+                <HashTag>{album.hashtag}</HashTag>
+              </AlbumDetail>
+            </AlbumContainer>
+          </StyledLink>
         ))}
       </CreatesContainer>
     </>

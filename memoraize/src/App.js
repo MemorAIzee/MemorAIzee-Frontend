@@ -35,8 +35,8 @@ function App() {
           <Route path="/Writereview" element={<Writereview />} />
           <Route path="/Mypage" element={<Mypage />} />
           <Route path="/Search" element={<Search />} />
-          <Route path="/Detailreview" element={<Detailreview />} />
-          <Route path="/Created" element={<Created />} />
+          <Route path="/Detailreview/:id" element={<Detailreview />} />
+          <Route path="/created/:id" element={<Created />} />
         </Routes>
       </Router>
     </>

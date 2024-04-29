@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 import Travel from '../../assets/images/Travelogimage.png';
 import Share from '../../assets/images/share.png';
+import { Link } from 'react-router-dom';
 
+const StyledLink = styled(Link)`
+  text-decoration: none; // 링크의 밑줄 제거
+  color: inherit; // 상속받은 색상을 사용
+  display: flex; // 원래와 같이 flex로 설정
+  flex-direction: column;
+`;
 const TravelContainer = styled.div`
   display: flex;
   align-self: flex-start;
@@ -38,7 +45,8 @@ const Album = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 2vw;
-  width: calc((100% - 4.4vw) / 3);
+  width: calc((100% - 2.2vw * 2) / 3);
+  min-width: 18.5vw;
 `;
 
 const Detail = styled.div`
@@ -89,7 +97,7 @@ const HashTag = styled.p`
   line-height: 1.2vw; /* 171.429% */
 `;
 
-const AlbumData = [
+export const AlbumData = [
   { id: 1, title: '앨범제목 1', date: '생성일 1', hashtag: '#해시태그1' },
   { id: 2, title: '앨범제목 2', date: '생성일 2', hashtag: '#해시태그2' },
   { id: 3, title: '앨범제목 3', date: '생성일 3', hashtag: '#해시태그3' },
@@ -107,21 +115,23 @@ const Travelog = ({ title = 'Travelog' }) => {
         </TravelContainer>
         <AlbumContainer>
           {AlbumData.map((album) => (
-            <Album key={album.id}>
-              <AlbumImage src={Travel} alt="Album Image" />
-              <Detail>
-                <TitleContainer>
-                  <Title>{album.title}</Title>
-                  <img
-                    src={Share}
-                    style={{ width: '0.8vw', height: '0.9vw' }}
-                    alt="Share Icon"
-                  />
-                </TitleContainer>
-                <Made>{album.date}</Made>
-                <HashTag>{album.hashtag}</HashTag>
-              </Detail>
-            </Album>
+            <StyledLink to={`/created/${album.id}`} key={album.id}>
+              <Album>
+                <AlbumImage src={Travel} alt="Album Image" />
+                <Detail>
+                  <TitleContainer>
+                    <Title>{album.title}</Title>
+                    <img
+                      src={Share}
+                      style={{ width: '0.8vw', height: '0.9vw' }}
+                      alt="Share Icon"
+                    />
+                  </TitleContainer>
+                  <Made>{album.date}</Made>
+                  <HashTag>{album.hashtag}</HashTag>
+                </Detail>
+              </Album>
+            </StyledLink>
           ))}
         </AlbumContainer>
       </CreatesContainer>

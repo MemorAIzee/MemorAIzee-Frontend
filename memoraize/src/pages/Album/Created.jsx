@@ -4,6 +4,8 @@ import Danang from '../../assets/images/danang.png';
 import LeftButtonImage from '../../assets/images/leftbutton.png';
 import RightButtonImage from '../../assets/images/rightbutton.png';
 import AlbumPhoto from '../../components/AlbumPhoto/AlbumPhoto';
+import { useParams } from 'react-router-dom';
+import { AlbumData } from '../../components/Travelog/Travelog';
 
 const Container = styled.div`
   display: flex;
@@ -99,6 +101,9 @@ const RightButton = styled.img`
 `;
 
 const Created = () => {
+  const { id } = useParams();
+  const album = AlbumData.find((a) => a.id === parseInt(id));
+
   return (
     <>
       <Header />
@@ -110,7 +115,9 @@ const Created = () => {
                 <LeftButton src={LeftButtonImage} alt="Left Button" />
                 <ColumnContainer>
                   <DayText>Day 1</DayText>
-                  <TitleText>지난 다낭 여행</TitleText>
+                  <TitleText>
+                    {album ? album.title : 'Album not found'}
+                  </TitleText>
                   <DateText>2020.01.02 - 01.09</DateText>
                 </ColumnContainer>
               </FlexContainer>

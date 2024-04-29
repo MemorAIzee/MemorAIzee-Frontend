@@ -8,6 +8,7 @@ import Time from '../../assets/images/Access time.png';
 import Call from '../../assets/images/Call.png';
 import ETC from '../../assets/images/More horiz.png';
 import Map from '../../components/Map/Map';
+import { useParams } from 'react-router-dom';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -101,6 +102,8 @@ const Travelo = styled.p`
 `;
 
 const Detailreview = () => {
+  const { id } = useParams();
+
   return (
     <>
       <Header />

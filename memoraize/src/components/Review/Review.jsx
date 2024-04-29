@@ -6,6 +6,7 @@ import Heartimage from '../../assets/images/heartimage.png';
 import review1 from '../../assets/images/reviewimage.png';
 import review2 from '../../assets/images/reviewimage1.png';
 import review3 from '../../assets/images/reviewimage2.png';
+import { Link } from 'react-router-dom';
 
 const ReviewContainer = styled.div`
   margin-top: 2vw;
@@ -109,40 +110,48 @@ const Review = () => {
       {reviewContainersData.map((container, index) => (
         <ReviewContainer key={index}>
           {container.map((reviewId) => (
-            <Reviews key={reviewId}>
-              <TitleContainer>
-                <UserInfoContainer>
-                  <img
-                    src={reviewprofile}
-                    style={{ width: '2.75vw', height: '2.75vw' }}
-                  />
-                  <NameContainer>
-                    <UserName>사용자이름</UserName>
-                    <StarContainer>
-                      {[...Array(totalStars)].map((_, index) => (
-                        <StyledStar
-                          key={index}
-                          src={index < rating ? Fullstar : Emptystar}
-                        />
-                      ))}
-                    </StarContainer>
-                  </NameContainer>
-                </UserInfoContainer>
-                <HeartIcon src={Heartimage} />
-              </TitleContainer>
-              <ContentContainer>
-                <ContentText>
-                  경치가 너무 좋고 사람이 없어서 정말 좋았어요!!! 꼭 또 가고
-                  싶은 곳입니다!!
-                </ContentText>
-              </ContentContainer>
+            <Link
+              to={`/detailReview/${reviewId}`}
+              key={reviewId}
+              style={{ textDecoration: 'none' }}
+            >
+              {' '}
+              {/* Link 추가 */}
+              <Reviews>
+                <TitleContainer>
+                  <UserInfoContainer>
+                    <img
+                      src={reviewprofile}
+                      style={{ width: '2.75vw', height: '2.75vw' }}
+                    />
+                    <NameContainer>
+                      <UserName>사용자이름</UserName>
+                      <StarContainer>
+                        {[...Array(totalStars)].map((_, index) => (
+                          <StyledStar
+                            key={index}
+                            src={index < rating ? Fullstar : Emptystar}
+                          />
+                        ))}
+                      </StarContainer>
+                    </NameContainer>
+                  </UserInfoContainer>
+                  <HeartIcon src={Heartimage} />
+                </TitleContainer>
+                <ContentContainer>
+                  <ContentText>
+                    경치가 너무 좋고 사람이 없어서 정말 좋았어요!!! 꼭 또 가고
+                    싶은 곳입니다!!
+                  </ContentText>
+                </ContentContainer>
 
-              <ImageContainer>
-                <Reviewimage src={review1} />
-                <Reviewimage src={review2} />
-                <Reviewimage src={review3} />
-              </ImageContainer>
-            </Reviews>
+                <ImageContainer>
+                  <Reviewimage src={review1} />
+                  <Reviewimage src={review2} />
+                  <Reviewimage src={review3} />
+                </ImageContainer>
+              </Reviews>
+            </Link>
           ))}
         </ReviewContainer>
       ))}
