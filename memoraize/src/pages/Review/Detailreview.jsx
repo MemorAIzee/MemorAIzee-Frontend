@@ -11,6 +11,8 @@ import Map from '../../components/Map/Map';
 import { useParams } from 'react-router-dom';
 import LeftButtonImage from '../../assets/images/leftbutton.png';
 import RightButtonImage from '../../assets/images/rightbutton.png';
+import { Wrapper } from '@googlemaps/react-wrapper';
+import Homes from '../../components/Map/Homes';
 
 const LeftButton = styled.img`
   flex-shrink: 0;
@@ -167,8 +169,11 @@ const Detailreview = () => {
             <Travelo>리뷰</Travelo>
           </TravelContainer>
           <Review />
-          <Map apiKey="AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw" />
         </CreatesContainer>
+
+        <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
+          <Homes></Homes>
+        </Wrapper>
       </Container>
     </>
   );
