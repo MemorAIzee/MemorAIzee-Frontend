@@ -60,7 +60,7 @@ const CreatesContainer = styled.div`
   width: 60%;
   margin-top: 7.65vw;
   margin-bottom: 7.5vw;
-  height: 75vw;
+  height: 120vw;
   align-items: center;
 `;
 
@@ -135,6 +135,14 @@ const Travelo = styled.p`
   line-height: normal;
 `;
 
+const MapContainer = styled.div`
+  width: 100%;
+  height: 50vw;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
 const Detailreview = () => {
   const { id } = useParams();
 
@@ -169,11 +177,15 @@ const Detailreview = () => {
             <Travelo>리뷰</Travelo>
           </TravelContainer>
           <Review />
-        </CreatesContainer>
 
-        <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
-          <Homes></Homes>
-        </Wrapper>
+          <div style={{ marginBottom: '10vw' }} />
+
+          <MapContainer>
+            <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
+              <Homes></Homes>
+            </Wrapper>
+          </MapContainer>
+        </CreatesContainer>
       </Container>
     </>
   );
