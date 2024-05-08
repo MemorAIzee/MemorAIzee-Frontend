@@ -1,5 +1,8 @@
 import Header from '../../components/Header/Header';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -53,6 +56,7 @@ const IdField = styled.input`
   border: 0.1vw solid #e1e1e1;
   background: #f7f7f7;
   padding-right: 6vw;
+  padding-left: 1vw;
 `;
 
 const CheckButton = styled.button`
@@ -131,53 +135,115 @@ const ButtonContainer = styled.div`
 `;
 
 const Signup = () => {
+  const navigate = useNavigate();
+
+  const [loginId, setLoginId] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [userName, setUserName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const handleSignup = async (event) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    try {
+      const response = await axios.post(
+        'https://api.memoraize.kr/api/user/signup',
+        {
+          loginId,
+          password,
+          userName,
+          phoneNumber,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log(response.data);
+      alert('회원가입 성공!');
+      navigate('/Login');
+    } catch (error) {
+      console.error(error);
+      alert('회원가입 실패: ' + error.message);
+    }
+  };
+
   return (
     <>
       <Header />
       <Container>
         <SignupContainer>
           <SignupText>Sign Up</SignupText>
-          <AllFieldContainer>
-            <FieldContainer>
-              <Text>아이디</Text>
-              <IdFieldContainer>
-                <IdField />
-                <CheckButton>중복확인</CheckButton>
-              </IdFieldContainer>
-            </FieldContainer>
-            <FieldContainer>
-              <Text>비밀번호</Text>
-              <IdField />
-            </FieldContainer>
-            <FieldContainer>
-              <Text>비밀번호 확인</Text>
-              <IdField />
-            </FieldContainer>
-            <FieldContainer>
-              <Text>닉네임</Text>
-              <IdFieldContainer>
-                <IdField />
-                <CheckButton>중복확인</CheckButton>
-              </IdFieldContainer>
-            </FieldContainer>
-            <FieldContainer>
-              <Text>휴대폰 인증</Text>
-              <FlexColumnContainer>
+          <form onSubmit={handleSignup}>
+            <AllFieldContainer>
+              <FieldContainer>
+                <Text>아이디</Text>
                 <IdFieldContainer>
-                  <IdField />
-                  <CheckButton>인증번호 요청</CheckButton>
+                  <IdField
+                    value={loginId}
+                    onChange={(e) => setLoginId(e.target.value)}
+                  />
+                  <CheckButton>중복확인</CheckButton>
                 </IdFieldContainer>
+              </FieldContainer>
+              <FieldContainer>
+                <Text>비밀번호</Text>
+                <IdField
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </FieldContainer>
+              <FieldContainer>
+                <Text>비밀번호 확인</Text>
+                <IdField
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </FieldContainer>
+              <FieldContainer>
+                <Text>닉네임</Text>
                 <IdFieldContainer>
-                  <IdField />
-                  <CheckButton>인증하기</CheckButton>
+                  <IdField
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                  />
+                  <CheckButton>중복확인</CheckButton>
                 </IdFieldContainer>
-              </FlexColumnContainer>
-            </FieldContainer>
-          </AllFieldContainer>
-          <ButtonContainer>
-            <CancelButton>취소하기</CancelButton>
-            <SubmitButton>가입하기</SubmitButton>
-          </ButtonContainer>
+              </FieldContainer>
+              {/* <FieldContainer>
+                <Text>휴대폰 인증</Text>
+                <FlexColumnContainer>
+                  <IdFieldContainer>
+                    <IdField
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                    <CheckButton>인증번호 요청</CheckButton>
+                  </IdFieldContainer>
+                  <IdFieldContainer>
+                    <IdField />
+                    <CheckButton>인증하기</CheckButton>
+                  </IdFieldContainer>
+                </FlexColumnContainer>
+              </FieldContainer> */}
+            </AllFieldContainer>
+            <ButtonContainer>
+              <CancelButton
+                type="button"
+                onClick={() => console.log('Cancelled')}
+              >
+                취소하기
+              </CancelButton>
+              <SubmitButton type="submit">가입하기</SubmitButton>
+            </ButtonContainer>
+          </form>
         </SignupContainer>
       </Container>
     </>

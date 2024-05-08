@@ -1,6 +1,10 @@
 import Header from '../../components/Header/Header';
 import styled from 'styled-components';
 import kakao from '../../assets/images/kakao.png';
+import { useState } from 'react';
+import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -120,6 +124,53 @@ const SimpleText = styled.p`
   line-height: normal;
 `;
 const Login = () => {
+  const [loginId, setLoginId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    const requestBody = {
+      loginId,
+      password,
+    };
+
+    try {
+      const response = await fetch('https://api.memoraize.kr/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Login failed with status: ${response.status}`);
+      }
+
+      const contentType = response.headers.get('Content-Type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Invalid content type received from server');
+      }
+
+      alert('로그인 성공!');
+      navigate('/');
+      const data = await response.json();
+      console.log('Login successful:', data);
+
+      const authToken = response.headers.get('authorization');
+      const refreshToken = response.headers.get('authorization-refresh');
+
+      console.log('Auth Token:', authToken);
+      console.log('Refresh Token:', refreshToken);
+
+      localStorage.setItem('authToken', authToken);
+      localStorage.setItem('refreshToken', refreshToken);
+    } catch (error) {
+      console.error('Error during login:', error.message);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -127,11 +178,19 @@ const Login = () => {
         <LoginContainer>
           <LoginText>Login</LoginText>
           <InputContainer>
-            <InputField placeholder="아이디를 입력해주세요"></InputField>
-            <InputField placeholder="비밀번호를 입력해주세요"></InputField>
+            <InputField
+              placeholder="아이디를 입력해주세요"
+              value={loginId}
+              onChange={(e) => setLoginId(e.target.value)}
+            ></InputField>
+            <InputField
+              placeholder="비밀번호를 입력해주세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></InputField>
           </InputContainer>
           <FindText>아이디 찾기 | 비밀번호 찾기</FindText>
-          <LoginBtn>로그인하기</LoginBtn>
+          <LoginBtn onClick={handleLogin}>로그인하기</LoginBtn>
           <JoinBtn>회원가입하기</JoinBtn>
           <Simplecontainer>
             <SimpleStroke />
