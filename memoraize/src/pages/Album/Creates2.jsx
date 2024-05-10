@@ -3,6 +3,9 @@ import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/creates2.png';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAlbum } from '../../AlbumContext/AlbumContext';
+import { useEffect } from 'react';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -138,6 +141,8 @@ const TextContainer = styled.div`
 `;
 
 const Creates2 = () => {
+  const { albumInfo, setAlbumInfo } = useAlbum();
+
   const navigate = useNavigate();
 
   const goToCreates1 = () => {
@@ -145,7 +150,16 @@ const Creates2 = () => {
   };
 
   const goToCreates3 = () => {
-    navigate('/creates3');
+    if (!albumInfo.trim()) {
+      alert('앨범 설명을 입력해주세요.');
+    } else {
+      console.log('앨범 설명:', albumInfo);
+      navigate('/creates3');
+    }
+  };
+
+  const handleAlbumInfoChange = (event) => {
+    setAlbumInfo(event.target.value); // 입력 필드의 값을 상태로 설정
   };
 
   return (
@@ -164,6 +178,8 @@ const Creates2 = () => {
             <NameText>앨범 설명</NameText>
             <AlbumField
               placeholder="앨범 설명을 입력해주세요"
+              value={albumInfo}
+              onChange={handleAlbumInfoChange}
               maxLength={50}
             ></AlbumField>
             <RequiredText>*최대 50자 이내</RequiredText>

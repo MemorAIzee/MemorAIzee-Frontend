@@ -5,6 +5,7 @@ import CircleLine from '../../assets/images/creates4.png';
 import { useNavigate } from 'react-router-dom';
 import Photocamera from '../../assets/images/Photo camera.png';
 import { useState } from 'react';
+import { useAlbum } from '../../AlbumContext/AlbumContext';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -206,9 +207,57 @@ const TextContainer = styled.div`
 const ShareOption = styled.option``;
 
 const Creates4 = () => {
+  const { albumName, albumInfo, images } = useAlbum();
+  const [albumAccess, setAlbumAccess] = useState('_PUBLIC');
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const [selectedShareOption, setSelectedShareOption] = useState('모두에게'); // 기본값 설정
+  const AlbumAccess = {
+    _PUBLIC: '_PUBLIC',
+    _PROTECTED: '_PROTECTED',
+    _PRIVATE: '_PRIVATE',
+  };
+
+  // const [albumAccess, setAlbumAccess] = useState(AlbumAccess.PUBLIC);
+
+  const submitAlbum = async () => {
+    const formData = new FormData();
+
+    formData.append('albumName', albumName);
+    formData.append('albumInfo', albumInfo);
+    formData.append('albumAccess', albumAccess);
+
+    images.forEach((file, index) => {
+      formData.append(`images`, file); // 서버에서 List<MultipartFile>로 받기 위해 같은 이름 'images'를 사용
+    });
+
+    // FormData 내용 로깅
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    const authToken = localStorage.getItem('authToken');
+
+    try {
+      const response = await fetch('https://api.memoraize.kr/api/album', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: formData,
+      });
+
+      console.log('Server response:', response);
+
+      if (response.ok) {
+        navigate('/');
+      } else {
+        throw new Error('Failed to submit album');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -216,12 +265,8 @@ const Creates4 = () => {
     navigate('/creates3');
   };
 
-  const triggerFileSelect = () => {
-    document.getElementById('photoUpload').click();
-  };
-
   const handleSelectShareOption = (option) => {
-    setSelectedShareOption(option); // 선택된 공유 범위 업데이트
+    setAlbumAccess(AlbumAccess[option]); // 상태 업데이트 함수 이름 변경
     setIsOpen(false); // 드롭다운 메뉴 닫기
   };
 
@@ -241,27 +286,25 @@ const Creates4 = () => {
             <NameText>앨범 공유 범위</NameText>
             <DropdownContainer>
               <DropdownButton onClick={() => setIsOpen(!isOpen)}>
-                <span>{selectedShareOption}</span>{' '}
+                <span>{albumAccess}</span>{' '}
               </DropdownButton>
               {isOpen && (
                 <DropdownMenu>
-                  <DropdownItem
-                    onClick={() => handleSelectShareOption('친구끼리')}
-                  >
-                    친구끼리
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() => handleSelectShareOption('나만보기')}
-                  >
-                    나만보기
-                  </DropdownItem>
+                  {Object.entries(AlbumAccess).map(([key, value]) => (
+                    <DropdownItem
+                      key={key}
+                      onClick={() => handleSelectShareOption(key)}
+                    >
+                      {value}
+                    </DropdownItem>
+                  ))}
                 </DropdownMenu>
               )}
             </DropdownContainer>
           </CreateContainer>
           <ButtonContainer>
             <CancelButton onClick={goToCreates3}>취소하기</CancelButton>
-            <SubmitButton>앨범 생성하기</SubmitButton>
+            <SubmitButton onClick={submitAlbum}>앨범 생성하기</SubmitButton>
           </ButtonContainer>
         </CreatesContainer>
       </Container>

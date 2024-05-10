@@ -16,28 +16,31 @@ import Mypage from './pages/Mypage/Mypage';
 import Search from './pages/Search/Search';
 import Detailreview from './pages/Review/Detailreview';
 import Created from './pages/Album/Created';
+import { AlbumProvider } from './AlbumContext/AlbumContext';
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Signup" element={<Signup />} />
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/Creates1" element={<Creates1 />} />
-          <Route path="/Creates2" element={<Creates2 />} />
-          <Route path="/Creates3" element={<Creates3 />} />
-          <Route path="/Creates4" element={<Creates4 />} />
-          <Route path="/Viewreview" element={<Viewreview />} />
-          <Route path="/Writereview" element={<Writereview />} />
-          <Route path="/Mypage" element={<Mypage />} />
-          <Route path="/Search" element={<Search />} />
-          <Route path="/Detailreview/:id" element={<Detailreview />} />
-          <Route path="/created/:id" element={<Created />} />
-        </Routes>
+        <AlbumProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Signup" element={<Signup />} />
+            <Route path="/Profile" element={<Profile />} />
+            <Route path="/Creates1" element={<Creates1 />} />
+            <Route path="/Creates2" element={<Creates2 />} />
+            <Route path="/Creates3" element={<Creates3 />} />
+            <Route path="/Creates4" element={<Creates4 />} />
+            <Route path="/Viewreview" element={<Viewreview />} />
+            <Route path="/Writereview" element={<Writereview />} />
+            <Route path="/Mypage" element={<Mypage />} />
+            <Route path="/Search" element={<Search />} />
+            <Route path="/Detailreview/:id" element={<Detailreview />} />
+            <Route path="/created/:id" element={<Created />} />
+          </Routes>
+        </AlbumProvider>
       </Router>
     </>
   );

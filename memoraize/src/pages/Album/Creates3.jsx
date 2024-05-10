@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Photocamera from '../../assets/images/Photo camera.png';
 import Cancel from '../../assets/images/Cancel.png';
 import { useState } from 'react';
+import { useAlbum } from '../../AlbumContext/AlbumContext';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -192,25 +193,35 @@ const CancelIcon = styled.img`
 
 const Creates3 = () => {
   const navigate = useNavigate();
-  const [selectedPhotos, setSelectedPhotos] = useState([]);
+  const { images, setImages } = useAlbum();
 
   const goToCreates2 = () => {
     navigate('/creates2');
   };
 
   const goToCreates4 = () => {
+    if (images.length === 0) {
+      alert('사진을 하나 이상 추가해주세요.');
+      return; // 함수를 여기서 종료하고 더 이상 진행하지 않음
+    }
     navigate('/Creates4');
   };
   const triggerFileSelect = () => {
     document.getElementById('photoUpload').click();
   };
-  // 파일이 선택되었을 때 호출될 함수
+
+  // const handleFileSelect = (event) => {
+  //   const files = event.target.files;
+  //   const newPhotos = Array.from(files).map((file) =>
+  //     URL.createObjectURL(file)
+  //   );
+  //   setImages((prevPhotos) => [...prevPhotos, ...newPhotos]);
+  // };
+
   const handleFileSelect = (event) => {
-    const files = event.target.files;
-    const newPhotos = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    setSelectedPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
+    const files = event.target.files; // 파일 입력에서 파일 객체들을 얻음
+    const newPhotos = Array.from(files); // FileList를 배열로 변환
+    setImages((prevPhotos) => [...prevPhotos, ...newPhotos]); // 기존 사진 목록에 새 파일 추가
   };
 
   return (
@@ -239,7 +250,7 @@ const Creates3 = () => {
               />
             </PhotoAddContainer>
             <RowContainer>
-              {selectedPhotos.map((photo, index) => (
+              {images.map((photo, index) => (
                 <SelectedPhoto key={index}>
                   <img
                     src={photo}
@@ -250,7 +261,7 @@ const Creates3 = () => {
                     src={Cancel}
                     alt="Cancel"
                     onClick={() => {
-                      setSelectedPhotos((prevPhotos) =>
+                      setImages((prevPhotos) =>
                         prevPhotos.filter((_, i) => i !== index)
                       );
                     }}

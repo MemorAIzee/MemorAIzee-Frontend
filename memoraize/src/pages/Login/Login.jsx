@@ -129,6 +129,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const handleSignup = () => {
+    navigate('/Signup');
+  };
+
   const handleLogin = async () => {
     const requestBody = {
       loginId,
@@ -153,10 +157,9 @@ const Login = () => {
         throw new Error('Invalid content type received from server');
       }
 
-      alert('로그인 성공!');
-      navigate('/');
       const data = await response.json();
       console.log('Login successful:', data);
+      navigate('/');
 
       const authToken = response.headers.get('authorization');
       const refreshToken = response.headers.get('authorization-refresh');
@@ -191,7 +194,7 @@ const Login = () => {
           </InputContainer>
           <FindText>아이디 찾기 | 비밀번호 찾기</FindText>
           <LoginBtn onClick={handleLogin}>로그인하기</LoginBtn>
-          <JoinBtn>회원가입하기</JoinBtn>
+          <JoinBtn onClick={handleSignup}>회원가입하기</JoinBtn>
           <Simplecontainer>
             <SimpleStroke />
             <SimpleText>간편 로그인</SimpleText>

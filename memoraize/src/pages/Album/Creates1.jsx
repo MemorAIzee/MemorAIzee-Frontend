@@ -3,7 +3,9 @@ import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/creates1.png';
 import { useNavigate } from 'react-router-dom';
-
+import { useState } from 'react';
+import { useAlbum } from '../../AlbumContext/AlbumContext';
+import { useEffect } from 'react';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -139,11 +141,27 @@ const TextContainer = styled.div`
 `;
 
 const Creates1 = () => {
+  const { albumName, setAlbumName } = useAlbum();
+
+  const handleAlbumNameChange = (event) => {
+    setAlbumName(event.target.value); // 입력 필드의 값을 상태로 설정
+  };
+
   const navigate = useNavigate();
 
   const goToCreates2 = () => {
-    navigate('/creates2');
+    if (!albumName.trim()) {
+      alert('앨범 이름을 입력해주세요.');
+    } else {
+      console.log('앨범 이름:', albumName);
+      navigate('/creates2');
+    }
   };
+
+  useEffect(() => {
+    console.log('Album name updated to:', albumName);
+  }, [albumName]);
+
   return (
     <>
       <Header />
@@ -158,7 +176,11 @@ const Creates1 = () => {
           <img src={CircleLine} style={{ width: '42.4vw', height: '1.6vw' }} />
           <CreateContainer>
             <NameText>앨범 이름</NameText>
-            <AlbumField placeholder="앨범 이름을 입력해주세요"></AlbumField>
+            <AlbumField
+              placeholder="앨범 이름을 입력해주세요"
+              value={albumName}
+              onChange={handleAlbumNameChange}
+            ></AlbumField>
             <RequiredText>*최대 20자 이내</RequiredText>
           </CreateContainer>
           <ButtonContainer>
