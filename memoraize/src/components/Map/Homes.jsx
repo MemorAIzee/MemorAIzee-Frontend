@@ -14,7 +14,11 @@ const Homes = () => {
   }, []);
 
   return (
-    <div ref={ref} id="map" style={{ width: '400px', height: '400px' }}></div>
+    <div
+      ref={ref}
+      id="map"
+      style={{ width: '60vw', height: '23.6vw', borderRadius: '15px' }}
+    ></div>
   );
 };
 

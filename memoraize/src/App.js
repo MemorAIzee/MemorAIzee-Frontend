@@ -17,6 +17,7 @@ import Search from './pages/Search/Search';
 import Detailreview from './pages/Review/Detailreview';
 import Created from './pages/Album/Created';
 import { AlbumProvider } from './AlbumContext/AlbumContext';
+import Template from './pages/Template/Template';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/Search" element={<Search />} />
             <Route path="/Detailreview/:id" element={<Detailreview />} />
             <Route path="/created/:id" element={<Created />} />
+            <Route path="/Template" element={<Template />} />
           </Routes>
         </AlbumProvider>
       </Router>

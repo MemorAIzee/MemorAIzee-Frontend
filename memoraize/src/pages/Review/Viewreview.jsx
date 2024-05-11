@@ -26,7 +26,8 @@ const CreatesContainer = styled.div`
 
 const ButtonContainerWrapper = styled.div`
   display: flex;
-  flex-direction: flex-start;
+  flex-direction: row;
+
   width: 100%;
 `;
 
@@ -70,6 +71,21 @@ const PopularButton = styled.button`
   line-height: normal;
 `;
 
+const FollowButton = styled.button`
+  display: inline-flex;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 4px;
+  background: var(--2, #5e81ff);
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.2vw; /* 150% */
+`;
 const Viewreview = () => {
   return (
     <>
@@ -83,6 +99,9 @@ const Viewreview = () => {
             <ButtonContainer>
               <NewButton>New</NewButton>
               <PopularButton>Popular</PopularButton>
+            </ButtonContainer>
+            <ButtonContainer>
+              <FollowButton>팔로우</FollowButton>
             </ButtonContainer>
           </ButtonContainerWrapper>
 

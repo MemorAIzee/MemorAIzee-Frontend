@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { NavLink, Link } from 'react-router-dom';
 import Logo from '../../assets/images/Logo.png';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../../useAuth/useAuth';
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -17,7 +18,7 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 1.45vw;
-  width: 65%;
+  width: 70%;
   align-items: center;
   gap: 3.4vw;
 `;
@@ -82,6 +83,14 @@ const Logotitle = styled.p`
 const Header = () => {
   const navigate = useNavigate();
 
+  const isAuthenticated = useAuth();
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
+    navigate('/login');
+  };
+
   return (
     <>
       <HeaderContainer>
@@ -113,6 +122,13 @@ const Header = () => {
               </svg>
             </SearchIcon>
           </SearchBarContainer>
+          {isAuthenticated ? (
+            <StyledNavLink to="/login" onClick={handleLogout}>
+              로그아웃
+            </StyledNavLink>
+          ) : (
+            <StyledNavLink to="/login">로그인</StyledNavLink>
+          )}
         </NavContainer>
       </HeaderContainer>
     </>
