@@ -95,10 +95,45 @@ const TextContainer = styled.div`
 const WholeAlbumContainer = styled.div`
   width: 100%;
   height: 35%;
+  justify-content: flex-end;
   background-color: green;
   margin-top: 5vw;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 `;
 
+const ImagesContainer = styled.div`
+  width: 80%;
+  height: 100%;
+  background-color: yellow;
+`;
+
+const TextsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 4vw;
+  gap: 1vw;
+  flex-direction: column;
+`;
+const Texts = styled.p`
+  color: #000;
+  font-family: Inter;
+  font-size: 1vw;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1vw; /* 124.878% */
+  margin-right: 3vw;
+`;
+
+const Texts2 = styled.p`
+  color: #000;
+  font-family: Inter;
+  font-size: 13.453px;
+  font-style: italic;
+  font-weight: 200;
+  line-height: 16.8px; /* 124.878% */
+`;
 const Template = () => {
   return (
     <>
@@ -117,7 +152,18 @@ const Template = () => {
           </Wrapper>
         </MapContainer>
 
-        <WholeAlbumContainer></WholeAlbumContainer>
+        <WholeAlbumContainer>
+          <ImagesContainer>
+            <img src={Image} style={{ width: '100%', height: '100%' }} />
+          </ImagesContainer>
+          <TextsContainer>
+            <Texts>
+              Alpine Adventures <br />
+              in Innsbruck
+            </Texts>
+            <Texts>Innsbruck, Austria</Texts>
+          </TextsContainer>
+        </WholeAlbumContainer>
       </MainConatiner>
     </>
   );
