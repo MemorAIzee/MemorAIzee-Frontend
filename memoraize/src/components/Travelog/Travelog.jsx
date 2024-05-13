@@ -37,7 +37,7 @@ const AlbumContainer = styled.div`
   margin-top: 2.4vw;
   display: flex;
   flex-direction: row;
-  gap: 2.2vw;
+  gap: 1.9vw;
   flex-wrap: wrap;
 `;
 

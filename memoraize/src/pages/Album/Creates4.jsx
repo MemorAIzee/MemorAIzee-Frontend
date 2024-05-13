@@ -247,7 +247,8 @@ const Creates4 = () => {
         body: formData,
       });
 
-      console.log('Server response:', response);
+      const data = await response.json();
+      console.log('Login successful:', data);
 
       if (response.ok) {
         navigate('/');
