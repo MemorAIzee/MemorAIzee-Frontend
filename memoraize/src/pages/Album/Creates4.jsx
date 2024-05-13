@@ -209,6 +209,7 @@ const ShareOption = styled.option``;
 const Creates4 = () => {
   const { albumName, albumInfo, images } = useAlbum();
   const [albumAccess, setAlbumAccess] = useState('_PUBLIC');
+  const { setAlbumId } = useAlbum();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -251,6 +252,7 @@ const Creates4 = () => {
       console.log('Login successful:', data);
 
       if (response.ok) {
+        setAlbumId(data.result.albumId);
         navigate('/');
       } else {
         throw new Error('Failed to submit album');

@@ -2,7 +2,15 @@ import styled from 'styled-components';
 import Travel from '../../assets/images/Travelogimage.png';
 import Share from '../../assets/images/share.png';
 import { Link } from 'react-router-dom';
+import EmptyHeart from '../../assets/images/emptywhite.png';
+import FilledHeart from '../../assets/images/heart.png';
+import { useState } from 'react';
+import { useContext } from 'react';
+import { AlbumProvider, useAlbum } from '../../AlbumContext/AlbumContext';
+import RightDirection from '../../assets/images/rightdirection.png';
+import { useNavigate } from 'react-router-dom';
 
+import { useEffect } from 'react';
 const StyledLink = styled(Link)`
   text-decoration: none; // 링크의 밑줄 제거
   color: inherit; // 상속받은 색상을 사용
@@ -11,7 +19,11 @@ const StyledLink = styled(Link)`
 `;
 const TravelContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-self: flex-start;
+  align-items: center;
+  gap: 1vw;
 `;
 
 const CreatesContainer = styled.div`
@@ -43,6 +55,7 @@ const AlbumContainer = styled.div`
 
 const Album = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   margin-bottom: 2vw;
   width: calc((100% - 2.2vw * 2) / 3);
@@ -97,6 +110,15 @@ const HashTag = styled.p`
   line-height: 1.2vw; /* 171.429% */
 `;
 
+const heartStyle = {
+  position: 'absolute',
+  right: '1vw',
+  top: '1vw',
+  width: '1.3vw',
+  height: '1.3vw',
+  cursor: 'pointer', // 마우스 포인터를 손가락 모양으로 변경
+};
+
 export const AlbumData = [
   { id: 1, title: '앨범제목 1', date: '생성일 1', hashtag: '#해시태그1' },
   { id: 2, title: '앨범제목 2', date: '생성일 2', hashtag: '#해시태그2' },
@@ -107,20 +129,76 @@ export const AlbumData = [
 ];
 
 const Travelog = ({ title = 'Travelog' }) => {
+  const navigate = useNavigate();
+
+  const handleRightDirectionClick = () => {
+    navigate('/WholeTravelog');
+  };
+
+  const { albumId } = useAlbum();
+  const [hearts, setHearts] = useState(new Array(AlbumData.length).fill(false));
+
+  const toggleHeart = (index) => {
+    const newHearts = [...hearts];
+    newHearts[index] = !newHearts[index];
+    setHearts(newHearts); // 해당 인덱스의 하트 상태를 토글
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const authToken = localStorage.getItem('authToken');
+      try {
+        const response = await fetch('https://api.memoraize.kr/api/album', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        console.log(data);
+      } catch (e) {
+        console.error('Failed to fetch album data:', e);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <CreatesContainer>
         <TravelContainer>
           <Travelo>{title}</Travelo>
+          <img
+            src={RightDirection}
+            onClick={handleRightDirectionClick}
+            style={{ width: '0.6vw', height: '1vw', cursor: 'pointer' }}
+          />
         </TravelContainer>
         <AlbumContainer>
-          {AlbumData.map((album) => (
+          {AlbumData.map((album, index) => (
             <StyledLink to={`/created/${album.id}`} key={album.id}>
               <Album>
                 <AlbumImage src={Travel} alt="Album Image" />
+                <img
+                  src={hearts[index] ? FilledHeart : EmptyHeart}
+                  style={heartStyle} // 스타일 객체 사용
+                  alt={hearts[index] ? 'Filled Heart' : 'Empty Heart'}
+                  onClick={(e) => {
+                    e.preventDefault(); // 링크 이동을 방지
+                    toggleHeart(index);
+                  }}
+                />
+
                 <Detail>
                   <TitleContainer>
                     <Title>{album.title}</Title>
+
                     <img
                       src={Share}
                       style={{ width: '0.8vw', height: '0.9vw' }}
@@ -128,6 +206,7 @@ const Travelog = ({ title = 'Travelog' }) => {
                     />
                   </TitleContainer>
                   <Made>{album.date}</Made>
+
                   <HashTag>{album.hashtag}</HashTag>
                 </Detail>
               </Album>

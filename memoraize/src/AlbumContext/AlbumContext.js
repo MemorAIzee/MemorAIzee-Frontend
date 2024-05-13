@@ -9,6 +9,7 @@ export const AlbumProvider = ({ children }) => {
   const [albumInfo, setAlbumInfo] = useState('');
   const [images, setImages] = useState([]);
   const [albumAccess, setAlbumAccess] = useState('PUBLIC');
+  const [albumId, setAlbumId] = useState(null);
 
   const value = {
     albumName,
@@ -19,6 +20,8 @@ export const AlbumProvider = ({ children }) => {
     setImages,
     albumAccess,
     setAlbumAccess,
+    albumId,
+    setAlbumId,
   };
 
   return (

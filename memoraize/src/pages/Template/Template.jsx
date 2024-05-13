@@ -6,7 +6,7 @@ import Map from '../../components/Map/Map';
 import Homes from '../../components/Map/Homes';
 import Image from '../../assets/images/albumimage.png';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import keyframes from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -257,18 +257,22 @@ const imageVariants = {
 
 const Template = () => {
   const [album, setAlbum] = useState(null);
+  const { albumId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
       try {
-        const response = await fetch('https://api.memoraize.kr/api/album/14', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          `https://api.memoraize.kr/api/album/${albumId}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -281,7 +285,7 @@ const Template = () => {
     };
 
     fetchData();
-  }, []);
+  }, [albumId]);
   return (
     <>
       <MainConatiner>
