@@ -6,6 +6,31 @@ import Map from '../../components/Map/Map';
 import Homes from '../../components/Map/Homes';
 import Image from '../../assets/images/albumimage.png';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import keyframes from 'styled-components';
+import { motion } from 'framer-motion';
+
+const slideUp = keyframes`
+  0% {
+    transform: translateY(100%); // 아래에서 시작
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0); // 최종 위치로
+    opacity: 1;
+  }
+`;
+
+const popUp = keyframes`
+  from {
+    transform: translateY(20px); // 아래에서 시작
+    opacity: 0; // 투명에서 시작
+  }
+  to {
+    transform: translateY(0); // 원래 위치로 이동
+    opacity: 1; // 완전 불투명
+  }
+`;
 
 const MainConatiner = styled.div`
   width: 100%;
@@ -54,13 +79,12 @@ const Infop = styled.p`
   line-height: 1.2vw;
 `;
 const MapContainer = styled.div`
-  width: 60%;
+  width: 100%;
   margin-top: 8.4vw;
   height: 23.5vw;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
-  margin-left: 10vw;
   background-color: yellow;
 
   justify-content: center;
@@ -154,21 +178,82 @@ const ColumnContainer = styled.div`
   gap: 0.2vw;
 `;
 
-const albums = [
-  { title: 'Alpine Adventures', location: 'Innsbruck, Austria', image: Image },
-  {
-    title: 'hello',
-    location: 'Innsbruck, Austffssfa',
-    image: Image,
-  },
-  {
-    title: 'Alpine Adventudsffsfs',
-    location: 'New York, USA',
-    image: Image,
-  },
-];
+const BodyContainer = styled.div`
+  width: 50%;
+  height: 1000%;
+  margin-bottom: 10vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
+const TripImageContainer = styled.div`
+  margin-top: 8vw;
+  overflow: hidden;
+  width: 100%;
+`;
 //albumId = 13
+
+const LocationName = styled.p`
+  color: #000;
+  font-family: Inter;
+  font-size: 1.3vw;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.2vw;
+`;
+
+const LocationNames = styled.p`
+  color: #000;
+  font-family: Inter;
+  font-size: 1vw;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.2vw;
+`;
+
+const InfoTextContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 1vw;
+  padding-right: 1vw;
+
+  height: 3vw;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+`;
+
+const TravelContainer = styled.div`
+  width: 100%;
+  height: 30vw;
+  position: relative;
+  overflow: hidden;
+`;
+
+const OverlayButton = styled(Link)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  width: 6vw;
+  height: 2.5vw;
+  text-align: center;
+
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.7); // 반투명 흰색 배경
+  border-radius: 1vw;
+  text-decoration: none;
+  color: black;
+  font-weight: 300;
+  font-size: 1vw;
+`;
+
+const imageVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const Template = () => {
   const [album, setAlbum] = useState(null);
@@ -211,28 +296,44 @@ const Template = () => {
           <img src={Logo} style={{ width: '4vw', height: '4vw' }} />
         </HeaderContainer>
 
-        <MapContainer>
-          <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
-            <Homes></Homes>
-          </Wrapper>
-        </MapContainer>
+        <BodyContainer>
+          <MapContainer>
+            <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
+              <Homes></Homes>
+            </Wrapper>
+          </MapContainer>
 
-        {album?.photo_list?.map((photo, index) => (
-          <WholeAlbumContainer key={index}>
-            <ImagesContainer>
-              <img
-                src={photo.photo_url}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </ImagesContainer>
-            <TextsContainer>
-              <Texts>
-                {photo.location?.place_name} <br />
-              </Texts>
-              <Texts>{photo.location?.date?.split('T')[0]}</Texts>
-            </TextsContainer>
-          </WholeAlbumContainer>
-        ))}
+          {album?.photo_list?.map((photo, index) => (
+            <TripImageContainer key={index}>
+              <InfoTextContainer>
+                <LocationName>{photo.location?.place_name}</LocationName>
+                <LocationNames>
+                  {photo.location?.date?.split('T')[0]}
+                  <br />
+                </LocationNames>
+              </InfoTextContainer>
+              <TravelContainer>
+                {/* <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.8 }}
+                  variants={imageVariants}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                > */}
+                <img
+                  src={photo.photo_url}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '1vw',
+                  }}
+                />
+                <OverlayButton>더보기</OverlayButton>
+                {/* </motion.div> */}
+              </TravelContainer>
+            </TripImageContainer>
+          ))}
+        </BodyContainer>
       </MainConatiner>
     </>
   );
