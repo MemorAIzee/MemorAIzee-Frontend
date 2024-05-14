@@ -12,6 +12,8 @@ import Header from '../Header/Header';
 import HomeBanner from '../../assets/images/HomeBanner.png';
 import arrowIcon from '../../assets/images/arrow_12px2.png';
 import arrow_12px from '../../assets/images/arrow_12px.png';
+import Trash from '../../assets/images/trash-2.png';
+
 const StyledLink = styled(Link)`
   text-decoration: none; // 링크의 밑줄 제거
   color: inherit; // 상속받은 색상을 사용
@@ -69,8 +71,14 @@ const Detail = styled.div`
 
 const TitleContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; // 아이콘 간 간격을 10px로 설정
 `;
 
 const AlbumImage = styled.img`
@@ -85,6 +93,7 @@ const Title = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  flex-grow: 1;
 `;
 
 const Made = styled.p`
@@ -312,6 +321,44 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
     setPage(newPage);
   };
 
+  const deleteAlbum = async (albumId) => {
+    const authToken = localStorage.getItem('authToken');
+
+    try {
+      const response = await fetch(
+        `https://api.memoraize.kr/api/album/${albumId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      if (response.ok && data.isSuccess) {
+        console.log('Album deleted successfully');
+        alert('앨범이 삭제되었습니다!');
+        window.location.reload(); // 페이지 새로고침
+      } else if (!response.ok && response.status === 403) {
+        console.error('Failed to delete the album');
+        alert('작성자만 앨범 삭제가 가능합니다!');
+      } else {
+        console.error('Failed to delete the album');
+        alert('앨범 삭제에 실패했습니다!');
+      }
+    } catch (e) {
+      console.error('Failed to delete the album:', e);
+      alert('작성자만 앨범 삭제가 가능합니다!');
+    }
+  };
+
   const handleLike = async (albumId, index) => {
     // 로컬 상태를 먼저 업데이트
     const newHearts = [...hearts];
@@ -422,36 +469,46 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
           </ButtonContainerWrapper>
           <AlbumContainer>
             {albums.map((album, index) => (
-              <StyledLink to={`/Template/${album.albumId}`} key={album.albumId}>
-                <Album>
+              <Album key={album.albumId}>
+                <StyledLink to={`/Template/${album.albumId}`}>
                   <AlbumImage src={album.mainImageUrl} alt="Album Image" />
-                  <img
-                    src={hearts[index] ? FilledHeart : EmptyHeart}
-                    style={heartStyle}
-                    alt={hearts[index] ? 'Filled Heart' : 'Empty Heart'}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLike(album.albumId, index);
-                    }}
-                  />
-
-                  <Detail>
-                    <TitleContainer>
-                      <Title>{album.albumName}</Title>
+                </StyledLink>
+                <img
+                  src={hearts[index] ? FilledHeart : EmptyHeart}
+                  style={heartStyle}
+                  alt={hearts[index] ? 'Filled Heart' : 'Empty Heart'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLike(album.albumId, index);
+                  }}
+                />
+                <Detail>
+                  <TitleContainer>
+                    <Title>{album.albumName}</Title>
+                    <IconContainer>
+                      <img
+                        src={Trash}
+                        alt="Delete Icon"
+                        style={{
+                          width: '1.1vw',
+                          height: '1.1vw',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => deleteAlbum(album.albumId)}
+                      />
                       <img
                         src={Share}
                         style={{ width: '0.8vw', height: '0.9vw' }}
                         alt="Share Icon"
                       />
-                    </TitleContainer>
-                    <Made>
-                      {new Date(album.createdAt).toLocaleDateString()}
-                    </Made>
-                  </Detail>
-                </Album>
-              </StyledLink>
+                    </IconContainer>
+                  </TitleContainer>
+                  <Made>{new Date(album.createdAt).toLocaleDateString()}</Made>
+                </Detail>
+              </Album>
             ))}
           </AlbumContainer>
+
           {totalPages > 0 && ( // 조건 추가
             <PaginationComponent
               page={page}

@@ -19,6 +19,7 @@ import Created from './pages/Album/Created';
 import { AlbumProvider } from './AlbumContext/AlbumContext';
 import Template from './pages/Template/Template';
 import WholeTravelog from './components/Travelog/WholeTravelog';
+import TemplateDetail from './pages/Template/TemplateDetail';
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
             <Route path="/created/:id" element={<Created />} />
             <Route path="/Template/:albumId" element={<Template />} />
             <Route path="/WholeTravelog" element={<WholeTravelog />} />
+            <Route
+              path="/template-detail/:photoId"
+              element={<TemplateDetail />}
+            />
           </Routes>
         </AlbumProvider>
       </Router>

@@ -6,10 +6,10 @@ import Map from '../../components/Map/Map';
 import Homes from '../../components/Map/Homes';
 import Image from '../../assets/images/albumimage.png';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import keyframes from 'styled-components';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import Backbutton from '../../assets/images/arrow-left2.png';
 
 const slideUp = keyframes`
   0% {
@@ -36,11 +36,11 @@ const popUp = keyframes`
 const MainConatiner = styled.div`
   width: 100%;
   height: 1000%;
-  background-color: RGB(243, 246, 254);
+  background-color: ${(props) => props.bgColor};
   justify-content: flex-start;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const HeaderContainer = styled.div`
@@ -79,121 +79,59 @@ const Infop = styled.p`
   font-weight: 300;
   line-height: 1.2vw;
 `;
-const MapContainer = styled.div`
-  width: 100%;
-  margin-top: 8.4vw;
-  height: 23.5vw;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  /* background-color: yellow; */
-
-  justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const AlbumContainer = styled.div`
-  width: 100%;
-  margin-top: 8.4vw;
-  height: 35%;
-  border-radius: 10px;
-  display: flex;
-  background-color: yellow;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-`;
-
-const AlbumText = styled.p`
-  color: #000;
-  font-family: Inter;
-  font-size: 1vw;
-  font-style: italic;
-  font-weight: 300;
-  margin-left: 3vw;
-  line-height: 1vw;
-  text-align: left; // 텍스트를 왼쪽으로 정렬
-  justify-content: flex-start;
-`;
 
 const TextContainer = styled.div`
   display: flex;
-  width: 15%;
-  /* background-color: red; */
-  align-items: center; // 내부 텍스트 중앙 정렬
-  justify-content: flex-start;
-  text-align: left;
-  padding: 0 20px; // 텍스트 주변 여백
-`;
-
-const WholeAlbumContainer = styled.div`
-  width: 100%;
-  height: 35vw;
-  justify-content: flex-end;
-  /* background-color: green; */
-  margin-top: 5vw;
-  display: flex;
-  align-items: center;
   flex-direction: row;
+  margin-top: 1vw;
+  /* background-color: red; */
+  justify-content: center;
+  text-align: center;
 `;
 
-const ImagesContainer = styled.div`
-  width: 80%;
-  height: 100%;
-  /* background-color: yellow; */
-`;
-
-const TextsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 4.5vw;
-  width: 10vw;
-  /* background-color: yellow; */
-  gap: 1vw;
-  flex-direction: column;
-`;
 const Texts = styled.p`
   color: #000;
   font-family: Inter;
-  font-size: 1vw;
+  font-size: 1.8vw;
   font-style: italic;
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1vw; /* 124.878% */
-  margin-right: 1vw;
+
   /* background-color: red; */
 `;
 
 const Texts2 = styled.p`
   color: #000;
   font-family: Inter;
-  font-size: 13.453px;
+  font-size: 1.3vw;
   font-style: italic;
   font-weight: 200;
-  line-height: 16.8px; /* 124.878% */
+  line-height: 1.8vw;
+  white-space: normal; /* 줄바꿈을 정상적으로 처리 */
+  word-wrap: break-word; /* 긴 단어가 있을 때 줄바꿈 처리 */
 `;
 
 const ColumnContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.2vw;
+  flex-direction: row;
+
+  width: 80%;
+  /* background-color: yellow; */
+  margin-left: 20vw;
+  text-align: center;
+  justify-content: center;
 `;
 
 const BodyContainer = styled.div`
-  width: 50%;
+  width: 55%;
   height: 1000%;
-  margin-bottom: 10vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
-const TripImageContainer = styled.div`
-  margin-top: 8vw;
-  overflow: hidden;
-  width: 100%;
+  display: flex;
+  margin-left: 20vw;
+  flex-direction: column;
+  align-items: flex-start;
+  /* background-color: red; */
 `;
-//albumId = 13
 
 const LocationName = styled.p`
   color: #000;
@@ -207,10 +145,10 @@ const LocationName = styled.p`
 const LocationNames = styled.p`
   color: #000;
   font-family: Inter;
-  font-size: 1vw;
+  font-size: 1.3vw;
   font-style: italic;
   font-weight: 300;
-  line-height: 1.2vw;
+  line-height: 2vw;
 `;
 
 const InfoTextContainer = styled.div`
@@ -251,20 +189,92 @@ const OverlayButton = styled(Link)`
   font-size: 1vw;
 `;
 
+const ContentContainer = styled.div`
+  margin-top: 5vw;
+  /* background-color: purple; */
+  width: 100%;
+  max-height: 15vw;
+`;
+
+const ImageContainer2 = styled.div`
+  margin-top: 5vw;
+  width: 100%;
+  height: 30vw;
+  /* background: blue; */
+  margin-right: 3vw;
+  margin-bottom: 10vw;
+`;
+
+const InforContainer = styled.div`
+  /* background-color: gray; */
+  margin-top: 5vw;
+  padding-top: 2vw;
+  margin-right: 2vw;
+  width: 20%;
+`;
+
+const DetailTexts = styled.p`
+  color: #000;
+  font-family: Inter;
+  font-size: 1vw;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.2vw;
+`;
+
+const DetailtextContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-right: 3vw;
+  gap: 0.5vw;
+`;
+
+const ExplainContainer = styled.div`
+  margin-bottom: 1vw;
+  text-align: left;
+`;
+
+const StyledDetailText = styled.p`
+  color: #000;
+  font-family: Inter;
+  font-size: 1vw;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.2vw;
+`;
+
 const imageVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0 },
 };
 
-const Template = () => {
+const TemplateDetail = () => {
   const [album, setAlbum] = useState(null);
-  const { albumId } = useParams();
-  const [photoId, setPhotoId] = useState(null);
+  const { photoId } = useParams();
+  const [backgroiundColor, setBackgroundColor] = useState('RGB(243, 246, 254)');
 
-  const navigate = useNavigate();
+  const DetailText = ({ dateString }) => {
+    // ISO 문자열을 Date 객체로 변환
+    const date = new Date(dateString);
 
-  const handleNavigation = (photoId) => {
-    navigate(`/template-detail/${photoId}`);
+    // 한국 시간대로 설정하면서 날짜와 시간 형식을 조정
+    const formattedDate = date
+      .toLocaleString('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric', // 년도는 네 자리 숫자로 표시
+        month: 'long', // 월은 긴 이름으로 표시
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      })
+      .replace('일', '일 ')
+      .replace(/시/, '시 ')
+      .replace(/분/, '분 ');
+
+    return <StyledDetailText>{formattedDate}</StyledDetailText>;
   };
 
   useEffect(() => {
@@ -272,7 +282,7 @@ const Template = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `https://api.memoraize.kr/api/album/${albumId}`,
+          `https://api.memoraize.kr/api/photo/${photoId}`,
           {
             method: 'GET',
             headers: {
@@ -286,6 +296,7 @@ const Template = () => {
         }
         const data = await response.json();
         setAlbum(data.result);
+        setBackgroundColor(data.result.photo_color_code);
         console.log(data);
       } catch (e) {
         console.error('Failed to fetch album data:', e);
@@ -293,61 +304,59 @@ const Template = () => {
     };
 
     fetchData();
-  }, [albumId]);
+  }, [photoId]);
+
   return (
     <>
-      <MainConatiner>
+      <MainConatiner bgColor={backgroiundColor}>
         <HeaderContainer>
           <ImageContainer>
-            <img src={Profile} style={{ width: '3vw', height: '3vw' }} />
-            <ColumnContainer>
-              {album && <Profilep>{album.album_title}</Profilep>}
-              {album && <Infop>{album.album_info}</Infop>}
-            </ColumnContainer>
+            <img src={Backbutton} style={{ width: '1.6vw', height: '1.6vw' }} />
           </ImageContainer>
           <img src={Logo} style={{ width: '4vw', height: '4vw' }} />
         </HeaderContainer>
 
-        <BodyContainer>
-          <MapContainer>
-            <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
-              <Homes></Homes>
-            </Wrapper>
-          </MapContainer>
+        {album && (
+          <>
+            <BodyContainer>
+              <TextContainer>
+                <Texts>{album.photo_title || 'No title'}</Texts>
+              </TextContainer>
 
-          {album?.photo_list?.map((photo, index) => (
-            <TripImageContainer key={index}>
-              <InfoTextContainer>
-                <LocationName>{photo.location?.place_name}</LocationName>
-                <LocationNames>
-                  {photo.location?.date?.split('T')[0]}
-                  <br />
-                </LocationNames>
-              </InfoTextContainer>
-              <TravelContainer>
+              <ContentContainer>
+                <Texts2>{album.photo_comment}</Texts2>
+              </ContentContainer>
+            </BodyContainer>
+
+            <ColumnContainer>
+              <ImageContainer2>
                 <img
-                  src={photo.photo_url}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '1vw',
-                  }}
+                  src={album.photo_url}
+                  style={{ width: '100%', height: '100%', borderRadius: '1vw' }}
                 />
-                <OverlayButton
-                  onClick={(e) => {
-                    e.preventDefault(); // 기본 이벤트 방지
-                    handleNavigation(photo.photo_id); // 현재 사진의 photo_id를 넘김
-                  }}
-                >
-                  더보기
-                </OverlayButton>
-              </TravelContainer>
-            </TripImageContainer>
-          ))}
-        </BodyContainer>
+              </ImageContainer2>
+              <InforContainer>
+                <DetailtextContainer>
+                  <ExplainContainer>
+                    <LocationNames>Location:</LocationNames>
+                    <DetailTexts>{album.location.place_name}</DetailTexts>
+                  </ExplainContainer>
+                  <ExplainContainer>
+                    <LocationNames>Date:</LocationNames>
+                    <DetailText dateString={album.location.date} />
+                  </ExplainContainer>
+                  <ExplainContainer>
+                    <LocationNames>Hash Tags:</LocationNames>
+                    <DetailTexts>{album.hashTage_list.hashtag_id}</DetailTexts>
+                  </ExplainContainer>
+                </DetailtextContainer>
+              </InforContainer>
+            </ColumnContainer>
+          </>
+        )}
       </MainConatiner>
     </>
   );
 };
 
-export default Template;
+export default TemplateDetail;
