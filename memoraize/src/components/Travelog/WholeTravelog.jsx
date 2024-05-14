@@ -10,7 +10,8 @@ import { AlbumProvider, useAlbum } from '../../AlbumContext/AlbumContext';
 import { useEffect } from 'react';
 import Header from '../Header/Header';
 import HomeBanner from '../../assets/images/HomeBanner.png';
-
+import arrowIcon from '../../assets/images/arrow_12px2.png';
+import arrow_12px from '../../assets/images/arrow_12px.png';
 const StyledLink = styled(Link)`
   text-decoration: none; // 링크의 밑줄 제거
   color: inherit; // 상속받은 색상을 사용
@@ -28,7 +29,7 @@ const CreatesContainer = styled.div`
   width: 60%;
   margin-top: 7.65vw;
   margin-bottom: 7.5vw;
-  height: 72vw;
+  height: 200vw;
   align-items: center;
 `;
 
@@ -214,22 +215,102 @@ const PopularButton = styled.button`
   line-height: normal;
 `;
 
-export const AlbumData = [
-  { id: 1, title: '앨범제목 1', date: '생성일 1', hashtag: '#해시태그1' },
-  { id: 2, title: '앨범제목 2', date: '생성일 2', hashtag: '#해시태그2' },
-  { id: 3, title: '앨범제목 3', date: '생성일 3', hashtag: '#해시태그3' },
-  { id: 4, title: '앨범제목 4', date: '생성일 4', hashtag: '#해시태그4' },
-  { id: 5, title: '앨범제목 5', date: '생성일 5', hashtag: '#해시태그5' },
-  { id: 6, title: '앨범제목 6', date: '생성일 6', hashtag: '#해시태그6' },
-];
+const PaginationContainer = styled.div`
+  margin-top: 3.4375vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PaginationNumber = styled.div`
+  display: inline-flex;
+  margin-right: 1.3021vw;
+  padding: 0.2083vw;
+  justify-content: center;
+  align-items: center;
+  color: var(--Gray-Gray-700, #464a4d);
+  text-align: center;
+
+  font-family: Pretendard;
+  font-size: 0.625vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 0.9375vw */
+  letter-spacing: -0.0187vw;
+
+  &:active {
+    border-radius: 5.2083vw;
+    background: var(--Primary-Red-200, #fff6f7);
+    color: var(--Primary-Red-900, #e95458);
+    text-align: center;
+    font-family: Inter;
+    font-size: 0.625vw;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
+const PaginationImg = styled.img`
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-right: 1.25vw;
+`;
+const PaginationImg2 = styled.img`
+  width: 1.25vw;
+  height: 1.25vw;
+  transform: rotate(180deg);
+  margin-left: 1.25vw;
+`;
+
+const PaginationComponent = ({ page, totalPages, handlePageChange }) => {
+  return (
+    <PaginationContainer>
+      {page > 1 && (
+        <PaginationImg
+          src={arrowIcon}
+          alt="Prev Page"
+          onClick={() => handlePageChange(page - 1)}
+        />
+      )}
+
+      {Array.from({ length: totalPages }, (_, i) => (
+        <PaginationNumber
+          key={i + 1}
+          onClick={() => handlePageChange(i + 1)}
+          style={{
+            fontWeight: page === i + 1 ? 'bold' : 'normal',
+          }}
+        >
+          {i + 1}
+        </PaginationNumber>
+      ))}
+
+      {page < totalPages && (
+        <PaginationImg2
+          src={arrowIcon}
+          alt="Next Page"
+          onClick={() => handlePageChange(page + 1)}
+        />
+      )}
+    </PaginationContainer>
+  );
+};
 
 const WholeTravelog = ({ title = 'Travelog' }) => {
   const [albums, setAlbums] = useState([]); // 앨범 데이터를 저장할 상태
-  const [hearts, setHearts] = useState(new Array(AlbumData.length).fill(false));
+  const [hearts, setHearts] = useState(new Array(6).fill(false));
   const [sortStatus, setSortStatus] = useState('_POPULAR');
+  const [totalAlbums, setTotalAlbums] = useState(0);
 
   const [page, setPage] = useState(1); // 페이지 번호
   const [pageCount, setPageCount] = useState(9);
+
+  const totalPages = Math.ceil(totalAlbums / pageCount);
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
 
   const handleLike = async (albumId, index) => {
     // 로컬 상태를 먼저 업데이트
@@ -276,13 +357,7 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
       const url = new URL('https://api.memoraize.kr/api/album');
-
-      // Query String 파라미터 설정
-      const params = {
-        sortStatus,
-        page,
-        pageCount,
-      };
+      const params = { sortStatus, page, pageCount };
       url.search = new URLSearchParams(params).toString();
 
       try {
@@ -300,12 +375,17 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
 
         const data = await response.json();
         console.log(data);
-        if (data.isSuccess) {
-          setAlbums(data.result.albums); // 서버로부터 받은 앨범 데이터로 상태 업데이트
+
+        if (data.isSuccess && data.result) {
+          setAlbums(data.result.albums);
           setHearts(data.result.albums.map((album) => album.likedByUser));
+          setTotalAlbums(data.result.totalElements);
+        } else {
+          setTotalAlbums(0);
         }
       } catch (e) {
         console.error('Failed to fetch album data:', e);
+        setTotalAlbums(0);
       }
     };
 
@@ -367,12 +447,18 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
                     <Made>
                       {new Date(album.createdAt).toLocaleDateString()}
                     </Made>
-                    {/* <HashTag>{album.</HashTag> */}
                   </Detail>
                 </Album>
               </StyledLink>
             ))}
           </AlbumContainer>
+          {totalPages > 0 && ( // 조건 추가
+            <PaginationComponent
+              page={page}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+            />
+          )}
         </CreatesContainer>
       </Container>
     </>
