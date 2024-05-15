@@ -9,8 +9,10 @@ import { useContext } from 'react';
 import { AlbumProvider, useAlbum } from '../../AlbumContext/AlbumContext';
 import RightDirection from '../../assets/images/rightdirection.png';
 import { useNavigate } from 'react-router-dom';
-
+import Trash from '../../assets/images/trash-2.png';
 import { useEffect } from 'react';
+import PlayButton from '../../assets/images/Start.png';
+
 const StyledLink = styled(Link)`
   text-decoration: none; // 링크의 밑줄 제거
   color: inherit; // 상속받은 색상을 사용
@@ -110,6 +112,12 @@ const HashTag = styled.p`
   line-height: 1.2vw; /* 171.429% */
 `;
 
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; // 아이콘 간 간격을 10px로 설정
+`;
+
 const heartStyle = {
   position: 'absolute',
   right: '1vw',
@@ -128,8 +136,88 @@ export const AlbumData = [
   { id: 6, title: '앨범제목 6', date: '생성일 6', hashtag: '#해시태그6' },
 ];
 
+const deleteAlbum = async (albumId) => {
+  const authToken = localStorage.getItem('authToken');
+
+  try {
+    const response = await fetch(
+      `https://api.memoraize.kr/api/album/${albumId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    if (response.ok && data.isSuccess) {
+      console.log('Album deleted successfully');
+      alert('앨범이 삭제되었습니다!');
+      window.location.reload(); // 페이지 새로고침
+    } else if (!response.ok && response.status === 403) {
+      console.error('Failed to delete the album');
+      alert('작성자만 앨범 삭제가 가능합니다!');
+    } else {
+      console.error('Failed to delete the album');
+      alert('앨범 삭제에 실패했습니다!');
+    }
+  } catch (e) {
+    console.error('Failed to delete the album:', e);
+    alert('작성자만 앨범 삭제가 가능합니다!');
+  }
+};
+
 const Travelog = ({ title = 'Travelog' }) => {
+  const [albums, setAlbums] = useState([]);
   const navigate = useNavigate();
+
+  const handleLike = async (albumId, index) => {
+    // 로컬 상태를 먼저 업데이트
+    const newHearts = [...hearts];
+    newHearts[index] = !newHearts[index];
+    setHearts(newHearts);
+
+    // authToken 가져오기
+    const authToken = localStorage.getItem('authToken');
+
+    // API 요청 보내기
+    try {
+      const response = await fetch(
+        `https://api.memoraize.kr/api/album/like/${albumId}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Like response:', data);
+
+      if (!data.isSuccess) {
+        newHearts[index] = !newHearts[index];
+        setHearts(newHearts);
+      }
+    } catch (e) {
+      console.error('Failed to like the album:', e);
+
+      newHearts[index] = !newHearts[index];
+      setHearts(newHearts);
+    }
+  };
 
   const handleRightDirectionClick = () => {
     navigate('/WholeTravelog');
@@ -144,11 +232,45 @@ const Travelog = ({ title = 'Travelog' }) => {
     setHearts(newHearts); // 해당 인덱스의 하트 상태를 토글
   };
 
+  const handlePlaySlideshow = async (albumId) => {
+    const authToken = localStorage.getItem('authToken'); // 인증 토큰 가져오기
+
+    try {
+      const response = await fetch(
+        `https://api.memoraize.kr/api/slideshow/${albumId}`,
+        {
+          method: 'GET', // HTTP 메소드 설정
+          headers: {
+            Authorization: `Bearer ${authToken}`, // 헤더에 인증 토큰 포함
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (e) {
+      console.error('Failed to fetch slideshow:', e);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
+      const url = new URL('https://api.memoraize.kr/api/album');
+      const params = {
+        sortStatus: '_POPULAR',
+        page: 1,
+        pageCount: 6,
+      };
+      url.search = new URLSearchParams(params).toString();
+
       try {
-        const response = await fetch('https://api.memoraize.kr/api/album', {
+        const response = await fetch(url, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -159,7 +281,9 @@ const Travelog = ({ title = 'Travelog' }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-
+        if (data && data.result && Array.isArray(data.result.albums)) {
+          setAlbums(data.result.albums); // API 응답으로 받은 앨범 데이터를 상태에 설정
+        }
         console.log(data);
       } catch (e) {
         console.error('Failed to fetch album data:', e);
@@ -181,36 +305,44 @@ const Travelog = ({ title = 'Travelog' }) => {
           />
         </TravelContainer>
         <AlbumContainer>
-          {AlbumData.map((album, index) => (
-            <StyledLink to={`/created/${album.id}`} key={album.id}>
-              <Album>
-                <AlbumImage src={Travel} alt="Album Image" />
-                <img
-                  src={hearts[index] ? FilledHeart : EmptyHeart}
-                  style={heartStyle} // 스타일 객체 사용
-                  alt={hearts[index] ? 'Filled Heart' : 'Empty Heart'}
-                  onClick={(e) => {
-                    e.preventDefault(); // 링크 이동을 방지
-                    toggleHeart(index);
-                  }}
-                />
-
-                <Detail>
-                  <TitleContainer>
-                    <Title>{album.title}</Title>
-
+          {albums.map((album, index) => (
+            <Album key={album.albumId}>
+              <StyledLink to={`/Template/${album.albumId}`}>
+                <AlbumImage src={album.mainImageUrl} alt="Album Image" />
+              </StyledLink>
+              <img
+                src={hearts[index] ? FilledHeart : EmptyHeart}
+                style={heartStyle}
+                alt={hearts[index] ? 'Filled Heart' : 'Empty Heart'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLike(album.albumId, index);
+                }}
+              />
+              <Detail>
+                <TitleContainer>
+                  <Title>{album.albumName}</Title>
+                  <IconContainer>
                     <img
-                      src={Share}
-                      style={{ width: '0.8vw', height: '0.9vw' }}
-                      alt="Share Icon"
+                      src={Trash}
+                      alt="Delete Icon"
+                      style={{
+                        width: '1.1vw',
+                        height: '1.1vw',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => deleteAlbum(album.albumId)}
                     />
-                  </TitleContainer>
-                  <Made>{album.date}</Made>
-
-                  <HashTag>{album.hashtag}</HashTag>
-                </Detail>
-              </Album>
-            </StyledLink>
+                    <img
+                      src={PlayButton}
+                      style={{ width: '1.75vw', cursor: 'pointer' }}
+                      onClick={() => handlePlaySlideshow(album.albumId)} // album.albumId로 정확히 전달
+                    />
+                  </IconContainer>
+                </TitleContainer>
+                <Made>{new Date(album.createdAt).toLocaleDateString()}</Made>
+              </Detail>
+            </Album>
           ))}
         </AlbumContainer>
       </CreatesContainer>

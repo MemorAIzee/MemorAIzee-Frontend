@@ -249,6 +249,52 @@ const imageVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
+function adjustColor(hex, saturationPercentage, lightnessPercentage) {
+  let r = parseInt(hex.substring(1, 3), 16);
+  let g = parseInt(hex.substring(3, 5), 16);
+  let b = parseInt(hex.substring(5, 7), 16);
+
+  // RGB를 HSL로 변환
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h,
+    s,
+    l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+
+  // 채도와 명도 조정
+  s *= saturationPercentage;
+  s = Math.max(0, Math.min(1, s)); // 채도가 0과 1 사이의 값이 되도록 제한
+  l *= lightnessPercentage;
+  l = Math.max(0, Math.min(1, l)); // 명도가 0과 1 사이의 값이 되도록 제한
+
+  // HSL을 문자열로 변환
+  return `hsl(${(h * 360).toFixed(1)}, ${(s * 100).toFixed(1)}%, ${(
+    l * 100
+  ).toFixed(1)}%)`;
+}
+
 const TemplateDetail = () => {
   const [album, setAlbum] = useState(null);
   const { photoId } = useParams();
@@ -296,7 +342,9 @@ const TemplateDetail = () => {
         }
         const data = await response.json();
         setAlbum(data.result);
-        setBackgroundColor(data.result.photo_color_code);
+        const color = adjustColor(data.result.photo_color_code, 0.3, 1.5); // 채도 50%
+        setBackgroundColor(color);
+        setBackgroundColor(color);
         console.log(data);
       } catch (e) {
         console.error('Failed to fetch album data:', e);
