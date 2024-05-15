@@ -267,6 +267,33 @@ const Template = () => {
     navigate(`/template-detail/${photoId}`);
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const authToken = localStorage.getItem('authToken');
+  //     try {
+  //       const response = await fetch(
+  //         `https://api.memoraize.kr/api/album/GoogleMapsPlatform/${albumId}`,
+  //         {
+  //           method: 'GET',
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //             'Content-Type': 'application/json',
+  //           },
+  //         }
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       const data = await response.json();
+  //       console.log('구글맵', data);
+  //     } catch (e) {
+  //       console.error('Failed to fetch album data:', e);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [albumId]);
+
   useEffect(() => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
@@ -311,7 +338,7 @@ const Template = () => {
         <BodyContainer>
           <MapContainer>
             <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
-              <Homes></Homes>
+              <Homes album={album} />
             </Wrapper>
           </MapContainer>
 

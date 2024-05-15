@@ -192,6 +192,31 @@ const SearchIcon = styled.div`
 const Search = () => {
   const [selectedCategory, setSelectedCategory] = useState('title'); // 기본 선택 카테고리
 
+  const [keyword, setKeyword] = useState('');
+
+  const handleSearch = async () => {
+    const authToken = localStorage.getItem('authToken');
+    const url = `https://api.memoraize.kr/search/keyword?keyword=${encodeURIComponent(
+      keyword
+    )}`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Ensure authToken is defined and valid
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data); // Handle the search results as needed
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -199,8 +224,13 @@ const Search = () => {
         <TextContainer2>
           <BannerText>Search</BannerText>
           <SearchBarContainer>
-            <SearchInput />
-            <SearchIcon>
+            <SearchInput
+              type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="무엇이든 검색하세요"
+            />
+            <SearchIcon onClick={handleSearch} style={{ cursor: 'pointer' }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1.4vw"
