@@ -24,8 +24,6 @@ const Homes = ({ album }) => {
       ],
     });
     setMap(newMap);
-
-    console.log('구글맵 앨범', album);
   }, []);
 
   useEffect(() => {
@@ -62,7 +60,7 @@ const Homes = ({ album }) => {
       map.fitBounds(bounds);
       new MarkerClusterer({ markers: newMarkers, map });
     }
-  }, [map, album]); // album을 의존성 배열에 추가
+  }, [map, album]);
 
   return (
     <div

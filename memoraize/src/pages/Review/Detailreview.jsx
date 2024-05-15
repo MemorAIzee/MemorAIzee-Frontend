@@ -13,6 +13,8 @@ import LeftButtonImage from '../../assets/images/leftbutton.png';
 import RightButtonImage from '../../assets/images/rightbutton.png';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Homes from '../../components/Map/Homes';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const LeftButton = styled.img`
   flex-shrink: 0;
@@ -106,6 +108,8 @@ const InfoText = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  white-space: pre-wrap;
+  max-width: 20vw;
 `;
 
 const InfoIcon = styled.img`
@@ -145,6 +149,35 @@ const MapContainer = styled.div`
 
 const Detailreview = () => {
   const { id } = useParams();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const authToken = localStorage.getItem('authToken');
+      try {
+        const response = await fetch(
+          `https://api.memoraize.kr/search/placeDetail/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        setData(data.result);
+      } catch (e) {
+        console.error('상세 리뷰:', e);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   return (
     <>
@@ -164,11 +197,20 @@ const Detailreview = () => {
               <ColumnContainer>
                 <InfoItemComponent
                   icon={Location}
-                  text="서울특별시 성동구 연무장 7가길 2 1층"
+                  text={data?.placeDetail?.placeName || 'Loading...'}
                 />
-                <InfoItemComponent icon={Time} text="오후 9:30에 영업 종료" />
-                <InfoItemComponent icon={Call} text="010-5803-0672" />
-                <InfoItemComponent icon={ETC} text="G3V3+6v 서울특별시" />
+                <InfoItemComponent
+                  icon={Time}
+                  text={data?.placeDetail?.businessStatus || 'Loading...'}
+                />
+                <InfoItemComponent
+                  icon={Call}
+                  text={data?.placeDetail?.phoneNumber || 'Loading...'}
+                />
+                <InfoItemComponent
+                  icon={ETC}
+                  text={data?.placeDetail?.address || 'Loading...'}
+                />
               </ColumnContainer>
             </RowsContainer>
           </RowContainer>

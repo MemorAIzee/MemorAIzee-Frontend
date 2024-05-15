@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import RowLine from '../../assets/images/Vector 213.png';
 import Titleimage from '../../assets/images/titleimage.png';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -16,6 +17,7 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   padding-top: 6.85vw;
+  margin-bottom: 5vw;
 `;
 
 const RowContainer = styled.div`
@@ -49,6 +51,7 @@ const CreatesContainer = styled.div`
   width: 60%;
   height: 42vw;
   align-items: center;
+  margin-bottom: 2vw;
 `;
 
 const TitleContainer = styled.div`
@@ -77,37 +80,6 @@ const IdP = styled.p`
   font-weight: 500;
   line-height: normal;
 `;
-
-const SearchData = {
-  title: [
-    { text: '애월읍 한라봉 최고 맛집', id: '@hanlabong' },
-    { text: '감귤의 품격-애월읍', id: '@mandarin-king' },
-    { text: '애월읍 위니브 감귤농장', id: '@hanlabong' },
-    { text: '애월읍 둘레길', id: '@jeju-sanchek' },
-    { text: '애월읍 휘뚜루마뚜루 부이르고', id: '@dailyjeju' },
-  ],
-  tag: [
-    { text: '제주여행', id: '#jeju' },
-    { text: '맛집탐방', id: '#foodie' },
-    { text: '감귤사랑', id: '#citrus' },
-    { text: '자연산책', id: '#naturewalk' },
-    { text: '일상여행', id: '#dailytravel' },
-  ],
-  user: [
-    { text: '제주도민 박사장', id: '@jeju-park' },
-    { text: '감귤박사 이모씨', id: '@citrus-lee' },
-    { text: '여행작가 김씨', id: '@travel-kim' },
-    { text: '자연주의자 최씨', id: '@nature-choi' },
-    { text: '데일리 블로거 정씨', id: '@daily-jung' },
-  ],
-  place: [
-    { text: '성산일출봉', id: '@seongsan' },
-    { text: '제주 올레길', id: '@jeju-olle' },
-    { text: '한라산 국립공원', id: '@hallasan' },
-    { text: '천지연 폭포', id: '@cheonjiyeon' },
-    { text: '우도', id: '@udo' },
-  ],
-};
 
 const TextContainer = styled.div`
   position: relative;
@@ -177,6 +149,10 @@ const SearchInput = styled.input`
   &:focus {
     outline: none;
   }
+
+  &::placeholder {
+    color: #fff;
+  }
 `;
 
 const SearchIcon = styled.div`
@@ -189,10 +165,38 @@ const SearchIcon = styled.div`
   align-items: center;
 `;
 
-const Search = () => {
-  const [selectedCategory, setSelectedCategory] = useState('title'); // 기본 선택 카테고리
+const RoundImageContainer = styled.div`
+  width: 5vw; // 이미지와 같은 크기
+  height: 5vw; // 이미지와 같은 높이
+  border-radius: 50%; // 원형 모양으로
+  overflow: hidden; // 내부 이미지가 동그란 모양을 따르도록
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
+const RoundImage = styled.img`
+  width: 100%;
+  height: auto; // 비율 유지
+`;
+
+const Search = () => {
+  const [selectedCategory, setSelectedCategory] = useState('album');
   const [keyword, setKeyword] = useState('');
+  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState({
+    albumList: [],
+    userList: [],
+    placeList: [],
+  });
+
+  const handleNavigate = (item) => {
+    if (selectedCategory === 'place') {
+      navigate(`/Detailreview/${item.id}`);
+    } else if (selectedCategory === 'user') {
+      navigate(`/UserTravelog/${item.id}`);
+    }
+  };
 
   const handleSearch = async () => {
     const authToken = localStorage.getItem('authToken');
@@ -203,7 +207,7 @@ const Search = () => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${authToken}`, // Ensure authToken is defined and valid
+          Authorization: `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
       });
@@ -211,7 +215,8 @@ const Search = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data); // Handle the search results as needed
+      setSearchResults(data.result);
+      console.log(data);
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }
@@ -252,16 +257,10 @@ const Search = () => {
         <CreatesContainer>
           <RowContainer>
             <TextContainer
-              isSelected={selectedCategory === 'title'}
-              onClick={() => setSelectedCategory('title')}
+              isSelected={selectedCategory === 'album'}
+              onClick={() => setSelectedCategory('album')}
             >
-              <Text isSelected={selectedCategory === 'title'}>제목</Text>
-            </TextContainer>
-            <TextContainer
-              isSelected={selectedCategory === 'tag'}
-              onClick={() => setSelectedCategory('tag')}
-            >
-              <Text isSelected={selectedCategory === 'tag'}>태그</Text>
+              <Text isSelected={selectedCategory === 'album'}>앨범명</Text>
             </TextContainer>
             <TextContainer
               isSelected={selectedCategory === 'user'}
@@ -275,19 +274,37 @@ const Search = () => {
             >
               <Text isSelected={selectedCategory === 'place'}>장소</Text>
             </TextContainer>
+            <TextContainer
+              isSelected={selectedCategory === 'review'}
+              onClick={() => setSelectedCategory('review')}
+            >
+              <Text isSelected={selectedCategory === 'review'}>리뷰</Text>
+            </TextContainer>
           </RowContainer>
 
           <img src={RowLine} style={{ width: '59vw' }} alt="Row Line" />
-          {SearchData[selectedCategory].map((item, index) => (
-            <TitleContainer key={index}>
-              <img
-                src={Titleimage}
-                style={{ width: '5vw', height: '5vw' }}
-                alt="Title"
-              />
+          {searchResults[selectedCategory + 'List']?.map((item, index) => (
+            <TitleContainer key={index} onClick={() => handleNavigate(item)}>
+              <RoundImageContainer>
+                <RoundImage
+                  src={item.mainImg || Titleimage}
+                  alt="Album Image"
+                />
+              </RoundImageContainer>
+
               <ColumnContainer>
-                <TitleP>{item.text}</TitleP>
-                <IdP>{item.id}</IdP>
+                <TitleP>
+                  {item.albumName ||
+                    item.reviewName ||
+                    item.placeName ||
+                    item.userName}
+                </TitleP>
+
+                <IdP>
+                  {item.userId || item.userName
+                    ? `@${item.userId || item.userName}`
+                    : ''}
+                </IdP>
               </ColumnContainer>
             </TitleContainer>
           ))}

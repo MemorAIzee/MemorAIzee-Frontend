@@ -306,11 +306,12 @@ const PaginationComponent = ({ page, totalPages, handlePageChange }) => {
   );
 };
 
-const WholeTravelog = ({ title = 'Travelog' }) => {
+const UserTravelog = ({ title = 'Travelog' }) => {
   const [albums, setAlbums] = useState([]); // 앨범 데이터를 저장할 상태
   const [hearts, setHearts] = useState(new Array(6).fill(false));
   const [sortStatus, setSortStatus] = useState('_POPULAR');
   const [totalAlbums, setTotalAlbums] = useState(0);
+  const { id } = useParams();
 
   const [page, setPage] = useState(1); // 페이지 번호
   const [pageCount, setPageCount] = useState(9);
@@ -320,6 +321,45 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const authToken = localStorage.getItem('authToken');
+      const url = new URL(`https://api.memoraize.kr/api/album/users/${id}`);
+      const params = { sortStatus, page, pageCount };
+      url.search = new URLSearchParams(params).toString();
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('특정사용자', data);
+
+        if (data.isSuccess && data.result) {
+          setAlbums(data.result.albums);
+          setHearts(data.result.albums.map((album) => album.likedByUser));
+          setTotalAlbums(data.result.totalElements);
+        } else {
+          setTotalAlbums(0);
+        }
+      } catch (e) {
+        console.error('Failed to fetch album data:', e);
+        setTotalAlbums(0);
+      }
+    };
+
+    fetchData();
+  }, [id, sortStatus, page, pageCount]);
 
   const deleteAlbum = async (albumId) => {
     const authToken = localStorage.getItem('authToken');
@@ -400,44 +440,44 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const authToken = localStorage.getItem('authToken');
-      const url = new URL('https://api.memoraize.kr/api/album');
-      const params = { sortStatus, page, pageCount };
-      url.search = new URLSearchParams(params).toString();
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const authToken = localStorage.getItem('authToken');
+  //       const url = new URL('https://api.memoraize.kr/api/album');
+  //       const params = { sortStatus, page, pageCount };
+  //       url.search = new URLSearchParams(params).toString();
 
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
+  //       try {
+  //         const response = await fetch(url, {
+  //           method: 'GET',
+  //           headers: {
+  //             Authorization: `Bearer ${authToken}`,
+  //             'Content-Type': 'application/json',
+  //           },
+  //         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+  //         if (!response.ok) {
+  //           throw new Error(`HTTP error! status: ${response.status}`);
+  //         }
 
-        const data = await response.json();
-        console.log(data);
+  //         const data = await response.json();
+  //         console.log(data);
 
-        if (data.isSuccess && data.result) {
-          setAlbums(data.result.albums);
-          setHearts(data.result.albums.map((album) => album.likedByUser));
-          setTotalAlbums(data.result.totalElements);
-        } else {
-          setTotalAlbums(0);
-        }
-      } catch (e) {
-        console.error('Failed to fetch album data:', e);
-        setTotalAlbums(0);
-      }
-    };
+  //         if (data.isSuccess && data.result) {
+  //           setAlbums(data.result.albums);
+  //           setHearts(data.result.albums.map((album) => album.likedByUser));
+  //           setTotalAlbums(data.result.totalElements);
+  //         } else {
+  //           setTotalAlbums(0);
+  //         }
+  //       } catch (e) {
+  //         console.error('Failed to fetch album data:', e);
+  //         setTotalAlbums(0);
+  //       }
+  //     };
 
-    fetchData();
-  }, [sortStatus, page, pageCount]);
+  //     fetchData();
+  //   }, [sortStatus, page, pageCount]);
 
   return (
     <>
@@ -522,4 +562,4 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
   );
 };
 
-export default WholeTravelog;
+export default UserTravelog;

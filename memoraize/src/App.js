@@ -20,6 +20,7 @@ import { AlbumProvider } from './AlbumContext/AlbumContext';
 import Template from './pages/Template/Template';
 import WholeTravelog from './components/Travelog/WholeTravelog';
 import TemplateDetail from './pages/Template/TemplateDetail';
+import UserTravelog from './components/Travelog/UserTravelog';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
             <Route path="/Creates2" element={<Creates2 />} />
             <Route path="/Creates3" element={<Creates3 />} />
             <Route path="/Creates4" element={<Creates4 />} />
-            <Route path="/Viewreview" element={<Viewreview />} />
+            <Route path="/Viewreview/:id" element={<Viewreview />} />
             <Route path="/Writereview" element={<Writereview />} />
             <Route path="/Mypage" element={<Mypage />} />
             <Route path="/Search" element={<Search />} />
@@ -44,6 +45,7 @@ function App() {
             <Route path="/created/:id" element={<Created />} />
             <Route path="/Template/:albumId" element={<Template />} />
             <Route path="/WholeTravelog" element={<WholeTravelog />} />
+            <Route path="/UserTravelog/:id" element={<UserTravelog />} />
             <Route
               path="/template-detail/:photoId"
               element={<TemplateDetail />}
