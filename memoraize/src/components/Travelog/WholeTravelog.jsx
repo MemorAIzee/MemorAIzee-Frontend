@@ -309,9 +309,10 @@ const PaginationComponent = ({ page, totalPages, handlePageChange }) => {
 const WholeTravelog = ({ title = 'Travelog' }) => {
   const [albums, setAlbums] = useState([]); // 앨범 데이터를 저장할 상태
   const [hearts, setHearts] = useState(new Array(6).fill(false));
-  const [sortStatus, setSortStatus] = useState('_POPULAR');
+
   const [totalAlbums, setTotalAlbums] = useState(0);
 
+  const [sortStatus, setSortStatus] = useState('_POPULAR');
   const [page, setPage] = useState(1); // 페이지 번호
   const [pageCount, setPageCount] = useState(9);
 

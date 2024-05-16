@@ -37,8 +37,8 @@ function App() {
             <Route path="/Creates2" element={<Creates2 />} />
             <Route path="/Creates3" element={<Creates3 />} />
             <Route path="/Creates4" element={<Creates4 />} />
-            <Route path="/Viewreview/:id" element={<Viewreview />} />
-            <Route path="/Writereview" element={<Writereview />} />
+            <Route path="/Viewreview" element={<Viewreview />} />
+            <Route path="/Writereview/:id" element={<Writereview />} />
             <Route path="/Mypage" element={<Mypage />} />
             <Route path="/Search" element={<Search />} />
             <Route path="/Detailreview/:id" element={<Detailreview />} />

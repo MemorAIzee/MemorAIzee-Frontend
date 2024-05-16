@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import Header from '../../components/Header/Header';
 import Banner from '../../assets/images/Writereviewbanner.png';
-import Star from '../../assets/images/reviewstar.png';
+import Star from '../../assets/images/Vector (2).png';
 import { useState } from 'react';
 import css from 'styled-components';
 import { useRef } from 'react';
 import Image from '../../assets/images/imageplus.png';
+import FillStar from '../../assets/images/Vector (1).png';
+import { useParams } from 'react-router-dom';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -254,10 +256,18 @@ const ButtonContainer = styled.div`
 `;
 
 const Writereview = () => {
+  const [title, setTitle] = useState('');
+  const [context, setContext] = useState('');
+  // const [placeId, setPlaceId] = useState('');
+  const [imageFiles, setImageFiles] = useState([]);
+
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
+  const [star, setStar] = useState(0);
+
+  const { id: placeId } = useParams();
 
   const toggleBold = () => setIsBold(!isBold);
   const toggleItalic = () => setIsItalic(!isItalic);
@@ -272,18 +282,88 @@ const Writereview = () => {
     fileInputRef.current.click();
   };
 
+  const handleInput = () => {
+    // Update the context state with the text content of the contentEditable div
+    setContext(contentEditableRef.current.textContent);
+  };
+
+  const handleFocus = () => {
+    if (contentEditableRef.current.textContent === '내용을 입력하세요.') {
+      contentEditableRef.current.textContent = '';
+      contentEditableRef.current.style.color = 'black';
+    }
+  };
+
+  const handleBlur = () => {
+    if (!contentEditableRef.current.textContent.trim()) {
+      contentEditableRef.current.textContent = '내용을 입력하세요.';
+      contentEditableRef.current.style.color = '#ccc'; // Light grey color for placeholder text
+    }
+  };
+
+  const handleStarClick = (index) => {
+    if (index + 1 === star) {
+      // If the clicked star is already filled, remove the stars after it
+      setStar(index); // Remove the star clicked (by setting to its index)
+    } else {
+      setStar(index + 1); // Otherwise, fill the stars up to and including the one clicked
+    }
+  };
+
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.substr(0, 5) === 'image') {
-      setImageFile(file);
+    const files = Array.from(event.target.files);
+    if (files && files.type.substr(0, 5) === 'image') {
+      setImageFile(files);
       const img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
+      img.src = URL.createObjectURL(files);
       img.style.maxWidth = '50%';
       contentEditableRef.current.appendChild(img);
     }
   };
 
   const [imageFile, setImageFile] = useState(null);
+
+  const submitReview = async () => {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('context', context);
+    formData.append('placeId', placeId.toString()); // Convert to string if needed
+    formData.append('star', star.toString()); // Convert to string, assuming backend can parse to Double
+
+    imageFiles.forEach((file) => {
+      formData.append('images', file); // Directly appending file objects
+    });
+
+    console.log(imageFiles);
+    console.log(title);
+    console.log(context);
+    console.log(placeId);
+    console.log(star);
+    console.log('Submitting review for placeId:', placeId); // Log to verify data
+
+    const authToken = localStorage.getItem('authToken');
+
+    try {
+      const response = await fetch(`https://api.memoraize.kr/api/reviews`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log('Review submission response:', data);
+      Navigate('/Viewreview');
+    } catch (error) {
+      console.error('Failed to submit review:', error);
+    }
+  };
 
   return (
     <>
@@ -296,13 +376,24 @@ const Writereview = () => {
         <CreatesContainer>
           <ContentContainer style={{ marginBottom: '4.2vw' }}>
             <ContentP>Rating</ContentP>
-            <img src={Star} style={{ width: '12.2vw', height: '1.8vw' }} />
+            {[...Array(5)].map((_, index) => (
+              <img
+                key={index}
+                src={index < star ? FillStar : Star}
+                style={{ width: '1.8vw', height: '1.8vw' }}
+                onClick={() => handleStarClick(index)}
+              />
+            ))}
           </ContentContainer>
 
           <ContentContainer style={{ gap: '9.45vw', alignItems: 'center' }}>
             <Contenttitle>Title</Contenttitle>
             <FieldContainer>
-              <Titlefield placeholder="제목을 입력해주세요" />
+              <Titlefield
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="제목을 입력해주세요"
+              />
               <RequireText>* 최대 50자 이내</RequireText>
             </FieldContainer>
           </ContentContainer>
@@ -338,7 +429,12 @@ const Writereview = () => {
               ref={contentEditableRef}
               contentEditable
               placeholder="내용을 입력하세요."
+              onInput={handleInput}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               isBold={isBold}
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
               isItalic={isItalic}
               isUnderline={isUnderline}
               isStrikethrough={isStrikethrough}
@@ -355,7 +451,7 @@ const Writereview = () => {
 
           <ButtonContainer>
             <CancelButton>취소하기</CancelButton>
-            <SubmitButton>앨범 생성하기</SubmitButton>
+            <SubmitButton onClick={submitReview}>리뷰쓰기</SubmitButton>
           </ButtonContainer>
         </CreatesContainer>
       </Container>

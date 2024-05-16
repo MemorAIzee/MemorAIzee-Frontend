@@ -96,7 +96,7 @@ const Reviewimage = styled.img`
   height: 7vw;
 `;
 
-const Review = () => {
+const Review = ({ reviews }) => {
   const reviewContainersData = [
     [1, 2, 3], // First ReviewContainer with three reviews
     [4, 5, 6], // Second ReviewContainer with three reviews
@@ -107,52 +107,49 @@ const Review = () => {
 
   return (
     <>
-      {reviewContainersData.map((container, index) => (
-        <ReviewContainer key={index}>
-          {container.map((reviewId) => (
-            <Link
-              to={`/detailReview/${reviewId}`}
-              key={reviewId}
-              style={{ textDecoration: 'none' }}
-            >
-              {' '}
-              {/* Link 추가 */}
-              <Reviews>
-                <TitleContainer>
-                  <UserInfoContainer>
-                    <img
-                      src={reviewprofile}
-                      style={{ width: '2.75vw', height: '2.75vw' }}
-                    />
-                    <NameContainer>
-                      <UserName>사용자이름</UserName>
-                      <StarContainer>
-                        {[...Array(totalStars)].map((_, index) => (
-                          <StyledStar
-                            key={index}
-                            src={index < rating ? Fullstar : Emptystar}
-                          />
-                        ))}
-                      </StarContainer>
-                    </NameContainer>
-                  </UserInfoContainer>
-                  <HeartIcon src={Heartimage} />
-                </TitleContainer>
-                <ContentContainer>
-                  <ContentText>
-                    경치가 너무 좋고 사람이 없어서 정말 좋았어요!!! 꼭 또 가고
-                    싶은 곳입니다!!
-                  </ContentText>
-                </ContentContainer>
+      {reviews?.map((review) => (
+        <ReviewContainer key={review.id}>
+          <Link
+            to={`/detailReview/${review.id}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Reviews>
+              <TitleContainer>
+                <UserInfoContainer>
+                  <img
+                    src={reviewprofile}
+                    alt="User Profile"
+                    style={{ width: '2.75vw', height: '2.75vw' }}
+                  />
+                  <NameContainer>
+                    <UserName>{review.userName}</UserName>
+                    <StarContainer>
+                      {[...Array(5)].map((_, index) => (
+                        <StyledStar
+                          key={index}
+                          src={index < review.rating ? Fullstar : Emptystar}
+                        />
+                      ))}
+                    </StarContainer>
+                  </NameContainer>
+                </UserInfoContainer>
+                <HeartIcon src={Heartimage} />
+              </TitleContainer>
+              <ContentContainer>
+                <ContentText>{review.content}</ContentText>
+              </ContentContainer>
 
-                <ImageContainer>
-                  <Reviewimage src={review1} />
-                  <Reviewimage src={review2} />
-                  <Reviewimage src={review3} />
-                </ImageContainer>
-              </Reviews>
-            </Link>
-          ))}
+              <ImageContainer>
+                {review.images.map((image, index) => (
+                  <Reviewimage
+                    key={index}
+                    src={image}
+                    alt={`Review Image ${index + 1}`}
+                  />
+                ))}
+              </ImageContainer>
+            </Reviews>
+          </Link>
         </ReviewContainer>
       ))}
     </>

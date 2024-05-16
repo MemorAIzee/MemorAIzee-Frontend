@@ -15,6 +15,7 @@ import { Wrapper } from '@googlemaps/react-wrapper';
 import Homes from '../../components/Map/Homes';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LeftButton = styled.img`
   flex-shrink: 0;
@@ -147,9 +148,30 @@ const MapContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
+const FollowButton = styled.button`
+  display: inline-flex;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 4px;
+  background: var(--2, #5e81ff);
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.2vw; /* 150% */
+`;
+
 const Detailreview = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
+
+  const Handlereview = () => {
+    navigate(`/Writereview/${id}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -189,6 +211,7 @@ const Detailreview = () => {
           <RightButton src={RightButtonImage} alt="Right Button" />
         </ImgContainer>
       </BannerContainer>
+
       <Container>
         <CreatesContainer>
           <RowContainer>
@@ -211,6 +234,7 @@ const Detailreview = () => {
                   icon={ETC}
                   text={data?.placeDetail?.address || 'Loading...'}
                 />
+                <FollowButton onClick={Handlereview}>리뷰쓰기</FollowButton>
               </ColumnContainer>
             </RowsContainer>
           </RowContainer>
