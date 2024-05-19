@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Profile from '../../assets/images/Rectangle.png';
 import Travelog from '../../components/Travelog/Travelog';
 import Review from '../../components/Review/Review';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const MypageContainer = styled.div`
   width: 100%;
@@ -101,6 +103,38 @@ const Travelo = styled.p`
 `;
 
 const Mypage = () => {
+  const [profile, setProfile] = useState({});
+  const userId = 'test';
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const authToken = localStorage.getItem('authToken');
+      try {
+        const response = await fetch(
+          `https://api.memoraize.kr/api/user/profile`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setProfile(data.result);
+        console.log(data);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      }
+    };
+
+    fetchProfile();
+  }, []); // 빈 배열을 의존성 배열로 추가
   return (
     <>
       <Header />

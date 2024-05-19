@@ -3,9 +3,6 @@ import reviewprofile from '../../assets/images/reviewprofile.png';
 import Fullstar from '../../assets/images/Star rate.png';
 import Emptystar from '../../assets/images/Star.png';
 import Heartimage from '../../assets/images/heartimage.png';
-import review1 from '../../assets/images/reviewimage.png';
-import review2 from '../../assets/images/reviewimage1.png';
-import review3 from '../../assets/images/reviewimage2.png';
 import { Link } from 'react-router-dom';
 
 const ReviewContainer = styled.div`
@@ -25,15 +22,15 @@ const Reviews = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Updated this line */
+  justify-content: space-between;
   padding: 1.6vw 1.2vw 0 1vw;
-  width: 100%; /* Ensure the container takes full width */
+  width: 100%;
 `;
 
 const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center; /* To align the items vertically */
+  align-items: center;
 `;
 
 const NameContainer = styled.div`
@@ -54,8 +51,8 @@ const UserName = styled.p`
 const StarContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Aligns items to the start and end */
-  width: 100%; /* Ensure the container takes full width of its parent */
+  justify-content: space-between;
+  width: 100%;
   margin-top: 0.2vw;
 `;
 
@@ -97,37 +94,29 @@ const Reviewimage = styled.img`
 `;
 
 const Review = ({ reviews }) => {
-  const reviewContainersData = [
-    [1, 2, 3], // First ReviewContainer with three reviews
-    [4, 5, 6], // Second ReviewContainer with three reviews
-  ];
-
-  const rating = 3;
-  const totalStars = 5;
-
   return (
     <>
       {reviews?.map((review) => (
-        <ReviewContainer key={review.id}>
+        <ReviewContainer key={review.reviewId}>
           <Link
-            to={`/detailReview/${review.id}`}
+            to={`/detailReview/${review.reviewId}`}
             style={{ textDecoration: 'none' }}
           >
             <Reviews>
               <TitleContainer>
                 <UserInfoContainer>
                   <img
-                    src={reviewprofile}
+                    src={review.writer.user_image_url || reviewprofile}
                     alt="User Profile"
                     style={{ width: '2.75vw', height: '2.75vw' }}
                   />
                   <NameContainer>
-                    <UserName>{review.userName}</UserName>
+                    <UserName>{review.writer.user_name}</UserName>
                     <StarContainer>
                       {[...Array(5)].map((_, index) => (
                         <StyledStar
                           key={index}
-                          src={index < review.rating ? Fullstar : Emptystar}
+                          src={index < review.star ? Fullstar : Emptystar}
                         />
                       ))}
                     </StarContainer>
@@ -140,7 +129,7 @@ const Review = ({ reviews }) => {
               </ContentContainer>
 
               <ImageContainer>
-                {review.images.map((image, index) => (
+                {review.reviewImages.map((image, index) => (
                   <Reviewimage
                     key={index}
                     src={image}
