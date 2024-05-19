@@ -16,6 +16,7 @@ import Homes from '../../components/Map/Homes';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReviewHomes from './ReviewHomes';
 
 const LeftButton = styled.img`
   flex-shrink: 0;
@@ -142,7 +143,7 @@ const Travelo = styled.p`
 
 const MapContainer = styled.div`
   width: 100%;
-  height: 50vw;
+  height: 23vw;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -167,6 +168,7 @@ const FollowButton = styled.button`
 const Detailreview = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [reviews, setReviews] = useState([]); // 리뷰 데이터를 저장할 상태 추가
   const navigate = useNavigate();
 
   const Handlereview = () => {
@@ -187,42 +189,43 @@ const Detailreview = () => {
             },
           }
         );
-
-        // 서버에서 반환된 텍스트를 직접 확인
-        const text = await response.text();
-        console.log('Raw response text:', text);
-        console.log('Response length:', text.length);
-
-        // JSON 파싱 시도
-        let data;
-        try {
-          data = JSON.parse(text);
-          console.log('Parsed JSON data:', data);
-        } catch (jsonError) {
-          console.error('JSON Parsing Error:', jsonError);
-          // 문제의 위치 근처에서 텍스트를 잘라서 출력해봅니다
-          const errorPosition = parseInt(
-            jsonError.message.match(/position (\d+)/)[1],
-            10
-          );
-          console.log(
-            'Problematic part of response:',
-            text.slice(errorPosition - 50, errorPosition + 50)
-          );
-          throw jsonError;
-        }
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+        const data = await response.json();
+        console.log(data);
         setData(data.result);
       } catch (e) {
         console.error('상세 리뷰:', e);
       }
     };
 
+    const fetchReviews = async () => {
+      const authToken = localStorage.getItem('authToken');
+      try {
+        const response = await fetch(
+          `https://api.memoraize.kr/api/reviews/places/${id}?page=1&pageCount=10`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const reviewData = await response.json();
+        console.log(reviewData);
+        setReviews(reviewData.result.reviewList);
+      } catch (e) {
+        console.error('리뷰 데이터:', e);
+      }
+    };
+
     fetchData();
+    fetchReviews(); // 리뷰 데이터를 가져오는 함수 호출
   }, [id]);
 
   return (
@@ -266,13 +269,20 @@ const Detailreview = () => {
           <TravelContainer>
             <Travelo>리뷰</Travelo>
           </TravelContainer>
-          <Review />
+          <Review reviews={reviews} />
 
           <div style={{ marginBottom: '10vw' }} />
 
           <MapContainer>
             <Wrapper apiKey={'AIzaSyCCj7ac4-Bxa9ILiW4DgfjSxxX8NgKeiHw'}>
-              <Homes></Homes>
+              {data.placeDetail && data.placeDetail.placeInfo && (
+                <ReviewHomes
+                  lat={data.placeDetail.placeInfo.lat}
+                  lng={data.placeDetail.placeInfo.lng}
+                  address={data.placeDetail.address}
+                  placeName={data.placeDetail.placeName}
+                />
+              )}
             </Wrapper>
           </MapContainer>
         </CreatesContainer>

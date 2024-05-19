@@ -7,7 +7,7 @@ import css from 'styled-components';
 import { useRef } from 'react';
 import Image from '../../assets/images/imageplus.png';
 import FillStar from '../../assets/images/Vector (1).png';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -260,6 +260,8 @@ const Writereview = () => {
   const [context, setContext] = useState('');
   // const [placeId, setPlaceId] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
+
+  const Navigate = useNavigate();
 
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
