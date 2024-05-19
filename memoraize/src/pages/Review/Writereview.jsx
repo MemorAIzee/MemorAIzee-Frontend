@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import Header from '../../components/Header/Header';
 import Banner from '../../assets/images/Writereviewbanner.png';
 import Star from '../../assets/images/Vector (2).png';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import css from 'styled-components';
-import { useRef } from 'react';
 import Image from '../../assets/images/imageplus.png';
 import FillStar from '../../assets/images/Vector (1).png';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,7 +25,7 @@ const CreatesContainer = styled.div`
   width: 58%;
   margin-top: 7.65vw;
   margin-bottom: 7.5vw;
-  height: 43vw;
+  height: auto; /* Height is now auto to adjust as per content */
   align-items: center;
 `;
 
@@ -105,7 +104,7 @@ const ReviewP = styled.p`
 const BlankBox = styled.div`
   margin-top: 1vw;
   width: 100%;
-  height: auto;
+  height: auto; /* Height is now auto to adjust as per content */
   fill: var(--black-white-white-1000, #fff);
   stroke-width: 0.1vw;
   stroke: var(--Gray-Gray-50, #fafafa);
@@ -180,7 +179,7 @@ const MidlineText = styled.p`
 
 const InputContent = styled.div`
   width: 100%;
-  height: 78%;
+  height: auto; /* Adjust height dynamically */
   flex-shrink: 0;
   min-height: 20vw;
   flex-grow: 1;
@@ -194,6 +193,7 @@ const InputContent = styled.div`
   border: 0.1vw solid #e1e1e1;
   outline: none; /* 포커스 시 아웃라인 제거 */
   border-top: none;
+  overflow: auto; /* Enable scrolling if content overflows */
 
   ${({ isBold }) =>
     isBold &&
@@ -258,10 +258,9 @@ const ButtonContainer = styled.div`
 const Writereview = () => {
   const [title, setTitle] = useState('');
   const [context, setContext] = useState('');
-  // const [placeId, setPlaceId] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
 
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -305,35 +304,45 @@ const Writereview = () => {
 
   const handleStarClick = (index) => {
     if (index + 1 === star) {
-      // If the clicked star is already filled, remove the stars after it
-      setStar(index); // Remove the star clicked (by setting to its index)
+      setStar(index);
     } else {
-      setStar(index + 1); // Otherwise, fill the stars up to and including the one clicked
+      setStar(index + 1);
     }
   };
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-    if (files && files.type.substr(0, 5) === 'image') {
-      setImageFile(files);
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(files);
-      img.style.maxWidth = '50%';
-      contentEditableRef.current.appendChild(img);
-    }
-  };
 
-  const [imageFile, setImageFile] = useState(null);
+    if (files.length + imageFiles.length > 3) {
+      alert('You can only upload a maximum of 3 images');
+      return;
+    }
+
+    const validFiles = files.filter(
+      (file) => file.type.substr(0, 5) === 'image'
+    );
+
+    setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
+
+    validFiles.forEach((file) => {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.style.maxWidth = '50%';
+      img.style.display = 'block';
+      img.style.marginBottom = '1vw'; // Add margin to avoid images sticking together
+      contentEditableRef.current.appendChild(img);
+    });
+  };
 
   const submitReview = async () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('context', context);
-    formData.append('placeId', placeId.toString()); // Convert to string if needed
-    formData.append('star', star.toString()); // Convert to string, assuming backend can parse to Double
+    formData.append('placeId', placeId.toString());
+    formData.append('star', star.toString());
 
     imageFiles.forEach((file) => {
-      formData.append('images', file); // Directly appending file objects
+      formData.append('images', file);
     });
 
     console.log(imageFiles);
@@ -341,7 +350,7 @@ const Writereview = () => {
     console.log(context);
     console.log(placeId);
     console.log(star);
-    console.log('Submitting review for placeId:', placeId); // Log to verify data
+    console.log('Submitting review for placeId:', placeId);
 
     const authToken = localStorage.getItem('authToken');
 
@@ -361,7 +370,7 @@ const Writereview = () => {
       const data = await response.json();
 
       console.log('Review submission response:', data);
-      Navigate('/Viewreview');
+      navigate('/Viewreview');
     } catch (error) {
       console.error('Failed to submit review:', error);
     }
@@ -412,7 +421,6 @@ const Writereview = () => {
                   alt="사진 추가"
                   style={{ width: '1.2vw', height: '1.2vw' }}
                 />
-                {/* <ImageP>사진추가</ImageP> */}
               </Imageplus>
               <input
                 type="file"
@@ -420,6 +428,7 @@ const Writereview = () => {
                 onChange={handleImageChange}
                 style={{ display: 'none' }}
                 accept="image/*"
+                multiple
               />
               <BoldText onClick={toggleBold}>B</BoldText>
               <ItalicText onClick={toggleItalic}>I</ItalicText>
@@ -440,14 +449,6 @@ const Writereview = () => {
               isItalic={isItalic}
               isUnderline={isUnderline}
               isStrikethrough={isStrikethrough}
-            />
-
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              style={{ display: 'none' }}
-              accept="image/*"
             />
           </BlankBox>
 

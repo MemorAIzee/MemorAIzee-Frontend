@@ -5,37 +5,35 @@ import Emptystar from '../../assets/images/Star.png';
 import Heartimage from '../../assets/images/heartimage.png';
 import { Link } from 'react-router-dom';
 
-const ReviewContainer = styled.div`
-  margin-top: 2vw;
-  display: flex;
-  flex-direction: row;
+const ReviewGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust to display 2 items per row */
   gap: 1.4vw;
+  margin-top: 2vw;
 `;
 
 const Reviews = styled.div`
-  width: 19.05vw;
-  height: 22.25vw;
-  flex-shrink: 0;
   background: #f7f7f7;
+  padding: 1.4vw;
+  border-radius: 0.5vw;
+  min-width: 28.6vw; /* Adjusted min-width for 2 items per row */
+  min-height: 16vw;
+  max-height: 16vw;
+  display: flex;
+  flex-direction: column;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  padding: 1.6vw 1.2vw 0 1vw;
-  width: 100%;
 `;
 
 const UserInfoContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
 `;
 
 const NameContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   margin-left: 0.55vw;
 `;
 
@@ -43,16 +41,12 @@ const UserName = styled.p`
   color: #000;
   font-family: Pretendard;
   font-size: 0.8vw;
-  font-style: normal;
   font-weight: 500;
-  line-height: normal;
 `;
 
 const StarContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+  align-items: center;
   margin-top: 0.2vw;
 `;
 
@@ -64,27 +58,23 @@ const StyledStar = styled.img`
 const HeartIcon = styled.img`
   width: 1vw;
   height: 0.9vw;
-  margin-top: 0.4vw;
 `;
 
 const ContentContainer = styled.div`
-  padding: 1.3vw 1.35vw 1.3vw 1.4vw;
-  display: flex;
-  height: 10.8vw;
+  padding: 1.3vw 0;
+  flex-grow: 1;
 `;
 
 const ContentText = styled.p`
   color: #000;
   font-family: Pretendard;
   font-size: 0.7vw;
-  font-style: normal;
   font-weight: 400;
   line-height: 1.2vw;
 `;
 
 const ImageContainer = styled.div`
   display: flex;
-  flex-direction: row;
   gap: 0.2vw;
 `;
 
@@ -95,53 +85,51 @@ const Reviewimage = styled.img`
 
 const Review = ({ reviews }) => {
   return (
-    <>
+    <ReviewGrid>
       {reviews?.map((review) => (
-        <ReviewContainer key={review.reviewId}>
-          <Link
-            to={`/detailReview/${review.reviewId}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Reviews>
-              <TitleContainer>
-                <UserInfoContainer>
-                  <img
-                    src={review.writer.user_image_url || reviewprofile}
-                    alt="User Profile"
-                    style={{ width: '2.75vw', height: '2.75vw' }}
-                  />
-                  <NameContainer>
-                    <UserName>{review.writer.user_name}</UserName>
-                    <StarContainer>
-                      {[...Array(5)].map((_, index) => (
-                        <StyledStar
-                          key={index}
-                          src={index < review.star ? Fullstar : Emptystar}
-                        />
-                      ))}
-                    </StarContainer>
-                  </NameContainer>
-                </UserInfoContainer>
-                <HeartIcon src={Heartimage} />
-              </TitleContainer>
-              <ContentContainer>
-                <ContentText>{review.content}</ContentText>
-              </ContentContainer>
-
-              <ImageContainer>
-                {review.reviewImages.map((image, index) => (
-                  <Reviewimage
-                    key={index}
-                    src={image}
-                    alt={`Review Image ${index + 1}`}
-                  />
-                ))}
-              </ImageContainer>
-            </Reviews>
-          </Link>
-        </ReviewContainer>
+        <Link
+          key={review.reviewId}
+          to={`/detailReview/${review.reviewId}`}
+          style={{ textDecoration: 'none' }}
+        >
+          <Reviews>
+            <TitleContainer>
+              <UserInfoContainer>
+                <img
+                  src={review.writer.user_image_url || reviewprofile}
+                  alt="User Profile"
+                  style={{ width: '2.75vw', height: '2.75vw' }}
+                />
+                <NameContainer>
+                  <UserName>{review.writer.user_name}</UserName>
+                  <StarContainer>
+                    {[...Array(5)].map((_, index) => (
+                      <StyledStar
+                        key={index}
+                        src={index < review.star ? Fullstar : Emptystar}
+                      />
+                    ))}
+                  </StarContainer>
+                </NameContainer>
+              </UserInfoContainer>
+              <HeartIcon src={Heartimage} />
+            </TitleContainer>
+            <ContentContainer>
+              <ContentText>{review.content}</ContentText>
+            </ContentContainer>
+            <ImageContainer>
+              {review.reviewImages.map((image, index) => (
+                <Reviewimage
+                  key={index}
+                  src={image}
+                  alt={`Review Image ${index + 1}`}
+                />
+              ))}
+            </ImageContainer>
+          </Reviews>
+        </Link>
       ))}
-    </>
+    </ReviewGrid>
   );
 };
 

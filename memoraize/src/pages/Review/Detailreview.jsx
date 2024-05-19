@@ -251,11 +251,16 @@ const Detailreview = () => {
                 />
                 <InfoItemComponent
                   icon={Time}
-                  text={data?.placeDetail?.businessStatus || 'Loading...'}
+                  text={
+                    Array.isArray(data?.placeDetail?.businessStatus) &&
+                    data.placeDetail.businessStatus.length === 0
+                      ? '24시간 영업'
+                      : data?.placeDetail?.businessStatus || 'Loading...'
+                  }
                 />
                 <InfoItemComponent
                   icon={Call}
-                  text={data?.placeDetail?.phoneNumber || 'Loading...'}
+                  text={data?.placeDetail?.phoneNumber || '전화번호 없음'}
                 />
                 <InfoItemComponent
                   icon={ETC}
