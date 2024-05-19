@@ -387,7 +387,9 @@ const TemplateDetail = () => {
                 <DetailtextContainer>
                   <ExplainContainer>
                     <LocationNames>Location:</LocationNames>
-                    <DetailTexts>{album.location.place_name}</DetailTexts>
+                    <DetailTexts>
+                      {album.location.place_name || 'Unknown Location'}
+                    </DetailTexts>
                   </ExplainContainer>
                   <ExplainContainer>
                     <LocationNames>Date:</LocationNames>
