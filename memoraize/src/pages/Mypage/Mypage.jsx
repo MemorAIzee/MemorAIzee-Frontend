@@ -5,6 +5,8 @@ import Travelog from '../../components/Travelog/Travelog';
 import Review from '../../components/Review/Review';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import MyTravelog from './MyTravelog';
+import MyReview from './MyReview';
 
 const MypageContainer = styled.div`
   width: 100%;
@@ -142,7 +144,11 @@ const Mypage = () => {
       <MypageContainer>
         <CreatesContainer>
           <RowContainer>
-            <img src={Profile} style={{ width: '12vw', height: '12vw' }} />
+            <img
+              src={profile.image_url ? profile.image_url : Profile}
+              alt="Profile"
+              style={{ width: '12vw', height: '12vw' }}
+            />
             <RowContainer
               style={{
                 marginTop: '1.25vw',
@@ -151,28 +157,23 @@ const Mypage = () => {
               }}
             >
               <ColumnContainer>
-                <UserName>사용자 이름</UserName>
+                <UserName>{profile.user_name}</UserName>
                 <RowContainer style={{ marginTop: '1.45vw' }}>
                   <ProfileP>앨범 수</ProfileP>
-                  <ProfileP style={{ marginRight: '2vw' }}>15</ProfileP>
+                  <ProfileP style={{ marginRight: '2vw' }}>
+                    {profile.album_count}
+                  </ProfileP>
                   <ProfileP>팔로워</ProfileP>
-                  <ProfileP style={{ marginRight: '2vw' }}>19.8만</ProfileP>
+                  <ProfileP style={{ marginRight: '2vw' }}>
+                    {profile.follower_count}
+                  </ProfileP>
                   <ProfileP>팔로잉</ProfileP>
-                  <ProfileP style={{ marginRight: '2vw' }}>239</ProfileP>
+                  <ProfileP style={{ marginRight: '2vw' }}>
+                    {profile.following_count}
+                  </ProfileP>
                 </RowContainer>
                 <RowContainer style={{ marginTop: '1vw' }}>
-                  <ProfileIntro>
-                    사용자 소개 글 입니다. 사용자 소개 글 입니다. 사용자 소개 글
-                    입니다. 사용자 소개 글 입니다. 사용자 소개 글 입니다. 사용자
-                    소개 글 입니다.사용자 소개 글 입니다.사용자 소개 글
-                    입니다.사용자 소개 글 입니다.사용자 소개 글 입니다.사용자
-                    소개 글 입니다.사용자 소개 글 입니다.사용자 소개 글
-                    입니다.사용자 소개 글 입니다.사용자 소개 글 입니다.사용자
-                    소개 글 입니다.사용자 소개 글 입니다.사용자 소개 글
-                    입니다.사용자 소개 글 입니다.사용자 소개 글 입니다.사용자
-                    소개 글 입니다.사용자 소개 글 입니다.사용자 소개 글
-                    입니다.사용자 소개 글 입니다.
-                  </ProfileIntro>
+                  <ProfileIntro>{profile.user_introduction}</ProfileIntro>
                 </RowContainer>
               </ColumnContainer>
               <FollowButton>팔로우</FollowButton>
@@ -182,13 +183,13 @@ const Mypage = () => {
       </MypageContainer>
 
       <Container>
-        <Travelog title="My Album" />
+        <MyTravelog title="My Album" myalbum={profile.albums} />
 
         <CreatesContainer style={{ paddingTop: '0vw' }}>
           <TravelContainer>
             <Travelo>My Reviews</Travelo>
           </TravelContainer>
-          <Review />
+          <MyReview />
         </CreatesContainer>
       </Container>
     </>

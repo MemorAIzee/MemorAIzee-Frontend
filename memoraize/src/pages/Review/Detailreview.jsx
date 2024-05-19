@@ -187,11 +187,35 @@ const Detailreview = () => {
             },
           }
         );
+
+        // 서버에서 반환된 텍스트를 직접 확인
+        const text = await response.text();
+        console.log('Raw response text:', text);
+        console.log('Response length:', text.length);
+
+        // JSON 파싱 시도
+        let data;
+        try {
+          data = JSON.parse(text);
+          console.log('Parsed JSON data:', data);
+        } catch (jsonError) {
+          console.error('JSON Parsing Error:', jsonError);
+          // 문제의 위치 근처에서 텍스트를 잘라서 출력해봅니다
+          const errorPosition = parseInt(
+            jsonError.message.match(/position (\d+)/)[1],
+            10
+          );
+          console.log(
+            'Problematic part of response:',
+            text.slice(errorPosition - 50, errorPosition + 50)
+          );
+          throw jsonError;
+        }
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        console.log(data);
+
         setData(data.result);
       } catch (e) {
         console.error('상세 리뷰:', e);

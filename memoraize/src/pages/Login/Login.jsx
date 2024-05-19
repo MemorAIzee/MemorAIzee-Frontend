@@ -169,6 +169,8 @@ const Login = () => {
 
       localStorage.setItem('authToken', authToken);
       localStorage.setItem('refreshToken', refreshToken);
+
+      localStorage.setItem('userId', data.result.user_id);
     } catch (error) {
       console.error('Error during login:', error.message);
     }

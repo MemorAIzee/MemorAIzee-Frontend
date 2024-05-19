@@ -381,9 +381,9 @@ const Viewreview = () => {
                 New
               </Button>
             </ButtonContainer>
-            <ButtonContainer>
+            {/* <ButtonContainer>
               <FollowButton onClick={MakeReview}>리뷰 쓰기</FollowButton>
-            </ButtonContainer>
+            </ButtonContainer> */}
           </ButtonContainerWrapper>
 
           {searchResults.length > 0 ? (
