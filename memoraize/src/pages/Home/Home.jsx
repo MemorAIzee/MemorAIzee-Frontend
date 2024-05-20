@@ -53,7 +53,7 @@ const Home = () => {
 
       <Container>
         <Travelog />
-        <FriendAlbum />
+        {/* <FriendAlbum /> */}
         <MemoryCut />
       </Container>
     </>

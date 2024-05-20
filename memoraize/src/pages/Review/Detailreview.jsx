@@ -1,22 +1,47 @@
 import Header from '../../components/Header/Header';
 import styled from 'styled-components';
-import RevieweBanner from '../../assets/images/Writereviewbanner.png';
+import RevieweBanners from '../../assets/images/Writereviewbanner.png';
 import Review from '../../components/Review/Review';
 import Reviewrec from '../../assets/images/reviewrec.png';
 import Location from '../../assets/images/Location on.png';
 import Time from '../../assets/images/Access time.png';
 import Call from '../../assets/images/Call.png';
 import ETC from '../../assets/images/More horiz.png';
-import Map from '../../components/Map/Map';
-import { useParams } from 'react-router-dom';
-import LeftButtonImage from '../../assets/images/leftbutton.png';
-import RightButtonImage from '../../assets/images/rightbutton.png';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Homes from '../../components/Map/Homes';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReviewHomes from './ReviewHomes';
+import LeftButtonImage from '../../assets/images/leftbutton.png';
+import RightButtonImage from '../../assets/images/rightbutton.png';
+import RevieweBanner from '../../assets/images/globe.png';
+
+const BannerContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 27vw;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+
+const ImgContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+`;
+
+const BannerText = styled.div`
+  position: absolute;
+  color: white;
+  font-family: Pretendard;
+  font-size: 3vw; // Adjust the font size as needed
+  font-weight: bold;
+  text-align: center;
+`;
 
 const LeftButton = styled.img`
   flex-shrink: 0;
@@ -27,6 +52,7 @@ const LeftButton = styled.img`
   top: 50%;
   transform: translateY(-50%);
 `;
+
 const RightButton = styled.img`
   position: absolute;
   right: -2.7%;
@@ -34,23 +60,6 @@ const RightButton = styled.img`
   transform: translateY(-50%);
   width: 3.9vw;
   height: 3.9vw;
-`;
-
-const BannerContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 27vw;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ImgContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 70%;
-  height: 100%;
-  position: relative;
 `;
 
 const Container = styled.div`
@@ -81,15 +90,12 @@ const RowsContainer = styled.div`
 `;
 
 const ColumnContainer = styled.div`
-  /* padding-top: 1.2vw;
-  padding-left: 2.35vw; */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1.6vw;
   padding-top: 1.2vw;
   padding-left: 2.35vw;
-  /* align-items: flex-start; */
 `;
 
 const PlacePicture = styled.img`
@@ -109,8 +115,8 @@ const InfoText = styled.p`
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;
-  white-space: pre-wrap;
+  line-height: 1.5vw;
+  white-space: pre-line; /* Preserve newlines */
   max-width: 20vw;
 `;
 
@@ -119,7 +125,6 @@ const InfoIcon = styled.img`
   height: 1.6vw;
 `;
 
-// InfoItem 컴포넌트 정의
 const InfoItemComponent = ({ icon, text }) => (
   <InfoItem>
     <InfoIcon src={icon} />
@@ -168,7 +173,7 @@ const FollowButton = styled.button`
 const Detailreview = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [reviews, setReviews] = useState([]); // 리뷰 데이터를 저장할 상태 추가
+  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
 
   const Handlereview = () => {
@@ -193,8 +198,8 @@ const Detailreview = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         setData(data.result);
+        console.log(data);
       } catch (e) {
         console.error('상세 리뷰:', e);
       }
@@ -225,24 +230,33 @@ const Detailreview = () => {
     };
 
     fetchData();
-    fetchReviews(); // 리뷰 데이터를 가져오는 함수 호출
+    fetchReviews();
   }, [id]);
+
+  const formatBusinessHours = (businessStatus) => {
+    if (Array.isArray(businessStatus) && businessStatus.length > 0) {
+      return businessStatus.join('\n'); // Join array elements with newlines
+    }
+    return '24시간 영업';
+  };
 
   return (
     <>
       <Header />
       <BannerContainer>
         <ImgContainer>
-          <LeftButton src={LeftButtonImage} alt="Left Button" />
           <img src={RevieweBanner} style={{ width: '100%', height: '27vw' }} />
-          <RightButton src={RightButtonImage} alt="Right Button" />
+          <BannerText>{data?.placeDetail?.placeName}</BannerText>
         </ImgContainer>
       </BannerContainer>
 
       <Container>
         <CreatesContainer>
           <RowContainer>
-            <PlacePicture src={Reviewrec} />
+            <ColumnContainer>
+              <PlacePicture src={Reviewrec} />
+              <FollowButton onClick={Handlereview}>리뷰쓰기</FollowButton>
+            </ColumnContainer>
             <RowsContainer>
               <ColumnContainer>
                 <InfoItemComponent
@@ -251,12 +265,7 @@ const Detailreview = () => {
                 />
                 <InfoItemComponent
                   icon={Time}
-                  text={
-                    Array.isArray(data?.placeDetail?.businessStatus) &&
-                    data.placeDetail.businessStatus.length === 0
-                      ? '24시간 영업'
-                      : data?.placeDetail?.businessStatus || 'Loading...'
-                  }
+                  text={formatBusinessHours(data?.placeDetail?.businessStatus)}
                 />
                 <InfoItemComponent
                   icon={Call}
@@ -266,7 +275,6 @@ const Detailreview = () => {
                   icon={ETC}
                   text={data?.placeDetail?.address || 'Loading...'}
                 />
-                <FollowButton onClick={Handlereview}>리뷰쓰기</FollowButton>
               </ColumnContainer>
             </RowsContainer>
           </RowContainer>

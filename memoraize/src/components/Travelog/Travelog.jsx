@@ -4,19 +4,18 @@ import Share from '../../assets/images/share.png';
 import { Link } from 'react-router-dom';
 import EmptyHeart from '../../assets/images/emptywhite.png';
 import FilledHeart from '../../assets/images/heart.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { AlbumProvider, useAlbum } from '../../AlbumContext/AlbumContext';
 import RightDirection from '../../assets/images/rightdirection.png';
 import { useNavigate } from 'react-router-dom';
 import Trash from '../../assets/images/trash-2.png';
-import { useEffect } from 'react';
 import PlayButton from '../../assets/images/Start.png';
 
 const StyledLink = styled(Link)`
-  text-decoration: none; // 링크의 밑줄 제거
-  color: inherit; // 상속받은 색상을 사용
-  display: flex; // 원래와 같이 flex로 설정
+  text-decoration: none;
+  color: inherit;
+  display: flex;
   flex-direction: column;
 `;
 const TravelContainer = styled.div`
@@ -109,13 +108,13 @@ const HashTag = styled.p`
   font-size: 0.7vw;
   font-style: normal;
   font-weight: 500;
-  line-height: 1.2vw; /* 171.429% */
+  line-height: 1.2vw;
 `;
 
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px; // 아이콘 간 간격을 10px로 설정
+  gap: 10px;
 `;
 
 const heartStyle = {
@@ -124,7 +123,7 @@ const heartStyle = {
   top: '1vw',
   width: '1.3vw',
   height: '1.3vw',
-  cursor: 'pointer', // 마우스 포인터를 손가락 모양으로 변경
+  cursor: 'pointer',
 };
 
 export const AlbumData = [
@@ -160,7 +159,7 @@ const deleteAlbum = async (albumId) => {
     if (response.ok && data.isSuccess) {
       console.log('Album deleted successfully');
       alert('앨범이 삭제되었습니다!');
-      window.location.reload(); // 페이지 새로고침
+      window.location.reload();
     } else if (!response.ok && response.status === 403) {
       console.error('Failed to delete the album');
       alert('작성자만 앨범 삭제가 가능합니다!');
@@ -177,17 +176,15 @@ const deleteAlbum = async (albumId) => {
 const Travelog = ({ title = 'Travelog' }) => {
   const [albums, setAlbums] = useState([]);
   const navigate = useNavigate();
+  const [slideshowUrl, setSlideshowUrl] = useState(''); // Add state for slideshow URL
 
   const handleLike = async (albumId, index) => {
-    // 로컬 상태를 먼저 업데이트
     const newHearts = [...hearts];
     newHearts[index] = !newHearts[index];
     setHearts(newHearts);
 
-    // authToken 가져오기
     const authToken = localStorage.getItem('authToken');
 
-    // API 요청 보내기
     try {
       const response = await fetch(
         `https://api.memoraize.kr/api/album/like/${albumId}`,
@@ -229,19 +226,19 @@ const Travelog = ({ title = 'Travelog' }) => {
   const toggleHeart = (index) => {
     const newHearts = [...hearts];
     newHearts[index] = !newHearts[index];
-    setHearts(newHearts); // 해당 인덱스의 하트 상태를 토글
+    setHearts(newHearts);
   };
 
   const handlePlaySlideshow = async (albumId) => {
-    const authToken = localStorage.getItem('authToken'); // 인증 토큰 가져오기
+    const authToken = localStorage.getItem('authToken');
 
     try {
       const response = await fetch(
         `https://api.memoraize.kr/api/slideshow/${albumId}`,
         {
-          method: 'GET', // HTTP 메소드 설정
+          method: 'GET',
           headers: {
-            Authorization: `Bearer ${authToken}`, // 헤더에 인증 토큰 포함
+            Authorization: `Bearer ${authToken}`,
             'Content-Type': 'application/json',
           },
         }
@@ -250,6 +247,9 @@ const Travelog = ({ title = 'Travelog' }) => {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        if (data.isSuccess) {
+          setSlideshowUrl(data.result); // Store the slideshow URL in state
+        }
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -282,7 +282,7 @@ const Travelog = ({ title = 'Travelog' }) => {
         }
         const data = await response.json();
         if (data && data.result && Array.isArray(data.result.albums)) {
-          setAlbums(data.result.albums); // API 응답으로 받은 앨범 데이터를 상태에 설정
+          setAlbums(data.result.albums);
         }
         console.log(data);
       } catch (e) {
@@ -336,7 +336,7 @@ const Travelog = ({ title = 'Travelog' }) => {
                     <img
                       src={PlayButton}
                       style={{ width: '1.75vw', cursor: 'pointer' }}
-                      onClick={() => handlePlaySlideshow(album.albumId)} // album.albumId로 정확히 전달
+                      onClick={() => handlePlaySlideshow(album.albumId)}
                     />
                   </IconContainer>
                 </TitleContainer>
@@ -345,6 +345,13 @@ const Travelog = ({ title = 'Travelog' }) => {
             </Album>
           ))}
         </AlbumContainer>
+        {slideshowUrl && (
+          <div>
+            <a href={slideshowUrl} target="_blank" rel="noopener noreferrer">
+              View Slideshow
+            </a>
+          </div>
+        )}
       </CreatesContainer>
     </>
   );

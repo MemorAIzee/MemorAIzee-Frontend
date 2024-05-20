@@ -182,6 +182,12 @@ const SelectedPhoto = styled.div`
   margin-bottom: 1.3vw;
 `;
 
+const StyledImage = styled.img`
+  width: 4vw;
+  height: 5.9vw;
+  object-fit: cover;
+`;
+
 const CancelIcon = styled.img`
   position: absolute;
   top: 1px;
@@ -220,7 +226,9 @@ const Creates3 = () => {
 
   const handleFileSelect = (event) => {
     const files = event.target.files; // 파일 입력에서 파일 객체들을 얻음
-    const newPhotos = Array.from(files); // FileList를 배열로 변환
+    const newPhotos = Array.from(files).map((file) =>
+      URL.createObjectURL(file)
+    );
     setImages((prevPhotos) => [...prevPhotos, ...newPhotos]); // 기존 사진 목록에 새 파일 추가
   };
 
@@ -252,11 +260,7 @@ const Creates3 = () => {
             <RowContainer>
               {images.map((photo, index) => (
                 <SelectedPhoto key={index}>
-                  <img
-                    src={photo}
-                    alt={`Selected ${index}`}
-                    style={{ width: '100%', height: '100%' }}
-                  />
+                  <StyledImage src={photo} alt={`Selected ${index}`} />
                   <CancelIcon
                     src={Cancel}
                     alt="Cancel"

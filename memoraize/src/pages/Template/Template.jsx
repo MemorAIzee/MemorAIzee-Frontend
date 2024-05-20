@@ -64,18 +64,16 @@ const ImageContainer = styled.div`
 
 const Profilep = styled.p`
   color: #000;
-  font-family: Inter;
   font-size: 1.2vw;
-  font-style: italic;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300;
   line-height: 1.2vw;
 `;
 
 const Infop = styled.p`
   color: #000;
-  font-family: Inter;
+  font-family: 'Poppins', sans-serif;
   font-size: 0.8vw;
-  font-style: italic;
   font-weight: 300;
   line-height: 1.2vw;
 `;
@@ -197,9 +195,8 @@ const TripImageContainer = styled.div`
 
 const LocationName = styled.p`
   color: #000;
-  font-family: Inter;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.3vw;
-  font-style: italic;
   font-weight: 300;
   line-height: 1.2vw;
 `;
