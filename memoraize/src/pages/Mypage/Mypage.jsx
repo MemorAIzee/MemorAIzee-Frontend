@@ -1,8 +1,6 @@
 import Header from '../../components/Header/Header';
 import styled from 'styled-components';
 import Profile from '../../assets/images/Rectangle.png';
-import Travelog from '../../components/Travelog/Travelog';
-import Review from '../../components/Review/Review';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import MyTravelog from './MyTravelog';
@@ -13,7 +11,6 @@ const MypageContainer = styled.div`
   height: 22vw;
   background-color: #f5f5f5;
   justify-content: center;
-
   display: flex;
 `;
 
@@ -104,6 +101,17 @@ const Travelo = styled.p`
   line-height: normal;
 `;
 
+const ProfileImage = styled.div`
+  width: 12vw;
+  height: 12vw;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-image: url(${(props) => props.image || Profile});
+  position: relative;
+`;
+
 const Mypage = () => {
   const [profile, setProfile] = useState({});
   const userId = 'test';
@@ -137,6 +145,7 @@ const Mypage = () => {
 
     fetchProfile();
   }, []); // 빈 배열을 의존성 배열로 추가
+
   return (
     <>
       <Header />
@@ -144,11 +153,7 @@ const Mypage = () => {
       <MypageContainer>
         <CreatesContainer>
           <RowContainer>
-            <img
-              src={profile.image_url ? profile.image_url : Profile}
-              alt="Profile"
-              style={{ width: '12vw', height: '12vw' }}
-            />
+            <ProfileImage image={profile.image_url} />
             <RowContainer
               style={{
                 marginTop: '1.25vw',
