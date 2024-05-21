@@ -143,6 +143,7 @@ const SearchInput = styled.input`
   width: 100%;
   height: 100%;
   border: none;
+  font-size: 1.2vw;
   border-radius: 0.5vw;
   padding: 0 3vw 0 1vw; /* 좌측 패딩을 조정해 텍스트 입력 영역을 확보하세요. */
   background: transparent;
@@ -194,7 +195,7 @@ const Search = () => {
     if (selectedCategory === 'place') {
       navigate(`/Detailreview/${item.id}`);
     } else if (selectedCategory === 'user') {
-      navigate(`/UserTravelog/${item.id}`);
+      navigate(`/Userpage/${item.id}`);
     }
   };
 

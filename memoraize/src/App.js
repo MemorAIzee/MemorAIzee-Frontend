@@ -21,6 +21,7 @@ import Template from './pages/Template/Template';
 import WholeTravelog from './components/Travelog/WholeTravelog';
 import TemplateDetail from './pages/Template/TemplateDetail';
 import UserTravelog from './components/Travelog/UserTravelog';
+import Userpage from './pages/Mypage/UserPage';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/Creates4" element={<Creates4 />} />
             <Route path="/Viewreview" element={<Viewreview />} />
             <Route path="/Writereview/:id" element={<Writereview />} />
+            <Route path="/Userpage/:id" element={<Userpage />} />
             <Route path="/Mypage" element={<Mypage />} />
             <Route path="/Search" element={<Search />} />
             <Route path="/Detailreview/:id" element={<Detailreview />} />
