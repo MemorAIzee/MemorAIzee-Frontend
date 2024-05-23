@@ -121,7 +121,7 @@ const Mypage = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `http://api.memoraize.kr:8080/api/user/profile`,
+          `https://api.memoraize.kr/api/user/profile`,
           {
             method: 'GET',
             headers: {

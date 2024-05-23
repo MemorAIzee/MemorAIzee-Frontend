@@ -239,7 +239,7 @@ const Creates4 = () => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-      const response = await fetch('http://api.memoraize.kr:8080/api/album', {
+      const response = await fetch('https://api.memoraize.kr/api/album', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${authToken}`,

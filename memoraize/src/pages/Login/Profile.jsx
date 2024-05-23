@@ -235,7 +235,7 @@ const Profile = () => {
 
     try {
       const response = await fetch(
-        `http://api.memoraize.kr:8080/api/user/profile`,
+        `https://api.memoraize.kr/api/user/profile`,
         {
           method: 'PUT',
           headers: {

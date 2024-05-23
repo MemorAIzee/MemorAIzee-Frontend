@@ -100,7 +100,7 @@ const MyReview = ({ page = 1, pageCount = 10 }) => {
 
       try {
         const response = await fetch(
-          `http://api.memoraize.kr:8080/api/reviews/users?userId=${userId}&page=${page}&pageCount=${pageCount}`,
+          `https://api.memoraize.kr/api/reviews/users?userId=${userId}&page=${page}&pageCount=${pageCount}`,
           {
             method: 'GET',
             headers: {

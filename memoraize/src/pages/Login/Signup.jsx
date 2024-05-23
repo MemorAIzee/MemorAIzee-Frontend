@@ -151,7 +151,7 @@ const Signup = () => {
     }
     try {
       const response = await axios.post(
-        'http://api.memoraize.kr:8080/api/user/signup',
+        'https://api.memoraize.kr/api/user/signup',
         {
           loginId,
           password,

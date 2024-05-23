@@ -185,7 +185,7 @@ const Detailreview = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `http://api.memoraize.kr:8080/search/placeDetail/${id}`,
+          `https://api.memoraize.kr/search/placeDetail/${id}`,
           {
             method: 'GET',
             headers: {
@@ -209,7 +209,7 @@ const Detailreview = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `http://api.memoraize.kr:8080/api/reviews/places/${id}?page=1&pageCount=10`,
+          `https://api.memoraize.kr/api/reviews/places/${id}?page=1&pageCount=10`,
           {
             method: 'GET',
             headers: {

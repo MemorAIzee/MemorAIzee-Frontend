@@ -327,7 +327,7 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
 
     try {
       const response = await fetch(
-        `http://api.memoraize.kr:8080/api/album/${albumId}`,
+        `https://api.memoraize.kr/api/album/${albumId}`,
         {
           method: 'DELETE',
           headers: {
@@ -372,7 +372,7 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
     // API 요청 보내기
     try {
       const response = await fetch(
-        `http://api.memoraize.kr:8080/api/album/like/${albumId}`,
+        `https://api.memoraize.kr/api/album/like/${albumId}`,
         {
           method: 'POST',
           headers: {
@@ -404,7 +404,7 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
   useEffect(() => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
-      const url = new URL('http://api.memoraize.kr:8080/api/album');
+      const url = new URL('https://api.memoraize.kr/api/album');
       const params = { sortStatus, page, pageCount };
       url.search = new URLSearchParams(params).toString();
 
