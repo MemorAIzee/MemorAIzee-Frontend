@@ -1,12 +1,13 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAlbum } from '../../AlbumContext/AlbumContext';
 import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/creates3.png';
-import { useNavigate } from 'react-router-dom';
 import Photocamera from '../../assets/images/Photo camera.png';
 import Cancel from '../../assets/images/Cancel.png';
-import { useState } from 'react';
-import { useAlbum } from '../../AlbumContext/AlbumContext';
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -212,24 +213,18 @@ const Creates3 = () => {
     }
     navigate('/Creates4');
   };
+
   const triggerFileSelect = () => {
     document.getElementById('photoUpload').click();
   };
 
-  // const handleFileSelect = (event) => {
-  //   const files = event.target.files;
-  //   const newPhotos = Array.from(files).map((file) =>
-  //     URL.createObjectURL(file)
-  //   );
-  //   setImages((prevPhotos) => [...prevPhotos, ...newPhotos]);
-  // };
-
   const handleFileSelect = (event) => {
-    const files = event.target.files; // 파일 입력에서 파일 객체들을 얻음
-    const newPhotos = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    setImages((prevPhotos) => [...prevPhotos, ...newPhotos]); // 기존 사진 목록에 새 파일 추가
+    const files = event.target.files;
+    const newPhotos = Array.from(files).map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setImages((prevPhotos) => [...prevPhotos, ...newPhotos]);
   };
 
   return (
@@ -260,7 +255,7 @@ const Creates3 = () => {
             <RowContainer>
               {images.map((photo, index) => (
                 <SelectedPhoto key={index}>
-                  <StyledImage src={photo} alt={`Selected ${index}`} />
+                  <StyledImage src={photo.url} alt={`Selected ${index}`} />
                   <CancelIcon
                     src={Cancel}
                     alt="Cancel"

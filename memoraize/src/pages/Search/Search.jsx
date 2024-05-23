@@ -201,7 +201,7 @@ const Search = () => {
 
   const handleSearch = async () => {
     const authToken = localStorage.getItem('authToken');
-    const url = `https://api.memoraize.kr/search/keyword?keyword=${encodeURIComponent(
+    const url = `http://api.memoraize.kr:8080/search/keyword?keyword=${encodeURIComponent(
       keyword
     )}`;
     try {

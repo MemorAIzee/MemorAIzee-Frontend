@@ -185,7 +185,7 @@ const Detailreview = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `https://api.memoraize.kr/search/placeDetail/${id}`,
+          `http://api.memoraize.kr:8080/search/placeDetail/${id}`,
           {
             method: 'GET',
             headers: {
@@ -209,7 +209,7 @@ const Detailreview = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `https://api.memoraize.kr/api/reviews/places/${id}?page=1&pageCount=10`,
+          `http://api.memoraize.kr:8080/api/reviews/places/${id}?page=1&pageCount=10`,
           {
             method: 'GET',
             headers: {
@@ -245,7 +245,10 @@ const Detailreview = () => {
       <Header />
       <BannerContainer>
         <ImgContainer>
-          <img src={RevieweBanner} style={{ width: '100%', height: '27vw' }} />
+          <img
+            src={data?.placeDetail?.placePhotoUrl || RevieweBanner}
+            style={{ width: '100%', height: '27vw' }}
+          />
           <BannerText>{data?.placeDetail?.placeName}</BannerText>
         </ImgContainer>
       </BannerContainer>
@@ -254,7 +257,9 @@ const Detailreview = () => {
         <CreatesContainer>
           <RowContainer>
             <ColumnContainer>
-              <PlacePicture src={Reviewrec} />
+              <PlacePicture
+                src={data?.placeDetail?.placePhotoUrl || Reviewrec}
+              />
               <FollowButton onClick={Handlereview}>리뷰쓰기</FollowButton>
             </ColumnContainer>
             <RowsContainer>

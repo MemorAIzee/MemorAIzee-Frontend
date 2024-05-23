@@ -140,7 +140,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch('https://api.memoraize.kr/login', {
+      const response = await fetch('http://api.memoraize.kr:8080/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -123,7 +123,7 @@ const Userpage = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `https://api.memoraize.kr/api/user/profile/${userId}`,
+          `http://api.memoraize.kr:8080/api/user/profile/${userId}`,
           {
             method: 'GET',
             headers: {
@@ -155,7 +155,7 @@ const Userpage = () => {
 
     try {
       const response = await fetch(
-        `https://api.memoraize.kr/api/user/follow/${userId}`,
+        `http://api.memoraize.kr:8080/api/user/follow/${userId}`,
         {
           method,
           headers: {

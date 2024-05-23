@@ -140,7 +140,7 @@ const deleteAlbum = async (albumId) => {
 
   try {
     const response = await fetch(
-      `https://api.memoraize.kr/api/album/${albumId}`,
+      `http://api.memoraize.kr:8080/api/album/${albumId}`,
       {
         method: 'DELETE',
         headers: {
@@ -187,7 +187,7 @@ const Travelog = ({ title = 'Travelog' }) => {
 
     try {
       const response = await fetch(
-        `https://api.memoraize.kr/api/album/like/${albumId}`,
+        `http://api.memoraize.kr:8080/api/album/like/${albumId}`,
         {
           method: 'POST',
           headers: {
@@ -234,7 +234,7 @@ const Travelog = ({ title = 'Travelog' }) => {
 
     try {
       const response = await fetch(
-        `https://api.memoraize.kr/api/slideshow/${albumId}`,
+        `http://api.memoraize.kr:8080/api/slideshow/${albumId}`,
         {
           method: 'GET',
           headers: {
@@ -261,7 +261,7 @@ const Travelog = ({ title = 'Travelog' }) => {
   useEffect(() => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
-      const url = new URL('https://api.memoraize.kr/api/album');
+      const url = new URL('http://api.memoraize.kr:8080/api/album');
       const params = {
         sortStatus: '_POPULAR',
         page: 1,

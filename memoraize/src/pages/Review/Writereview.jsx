@@ -355,7 +355,7 @@ const Writereview = () => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-      const response = await fetch(`https://api.memoraize.kr/api/reviews`, {
+      const response = await fetch(`http://api.memoraize.kr:8080/api/reviews`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${authToken}`,

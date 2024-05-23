@@ -228,11 +228,10 @@ const Creates4 = () => {
     formData.append('albumInfo', albumInfo);
     formData.append('albumAccess', albumAccess);
 
-    images.forEach((file, index) => {
-      formData.append(`images`, file); // 서버에서 List<MultipartFile>로 받기 위해 같은 이름 'images'를 사용
+    images.forEach((photo) => {
+      formData.append('images', photo.file);
     });
 
-    // FormData 내용 로깅
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
@@ -240,7 +239,7 @@ const Creates4 = () => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-      const response = await fetch('https://api.memoraize.kr/api/album', {
+      const response = await fetch('http://api.memoraize.kr:8080/api/album', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -248,14 +247,20 @@ const Creates4 = () => {
         body: formData,
       });
 
-      const data = await response.json();
-      console.log('Login successful:', data);
+      if (!response.ok) {
+        // 응답이 성공적이지 않으면 오류를 발생시킵니다.
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-      if (response.ok) {
+      // JSON 형식의 응답을 파싱합니다.
+      const data = await response.json();
+      console.log('Submission successful:', data);
+
+      if (data.isSuccess) {
         setAlbumId(data.result.albumId);
         navigate('/');
       } else {
-        throw new Error('Failed to submit album');
+        console.error('Submission failed:', data.message);
       }
     } catch (error) {
       console.error('Submission error:', error);

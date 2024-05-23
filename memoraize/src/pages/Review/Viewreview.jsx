@@ -198,6 +198,7 @@ const SearchInput = styled.input`
   border-radius: 0.5vw;
   padding: 0 3vw 0 1vw; /* 좌측 패딩을 조정해 텍스트 입력 영역을 확보하세요. */
   background: transparent;
+  font-size: 1.2vw;
   &:focus {
     outline: none;
   }
@@ -269,7 +270,7 @@ const Viewreview = () => {
   const handleSearch = async () => {
     const authToken = localStorage.getItem('authToken');
     const url = new URL(
-      'https://api.memoraize.kr/api/reviews/places/${placeId}'
+      'http://api.memoraize.kr:8080/api/reviews/places/${placeId}'
     );
     const params = { keyword, page, pageCount };
     url.search = new URLSearchParams(params).toString();
@@ -297,7 +298,7 @@ const Viewreview = () => {
   useEffect(() => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
-      const url = new URL('https://api.memoraize.kr/api/reviews');
+      const url = new URL('http://api.memoraize.kr:8080/api/reviews');
       const params = { sortStatus, page, pageCount };
       url.search = new URLSearchParams(params).toString();
 

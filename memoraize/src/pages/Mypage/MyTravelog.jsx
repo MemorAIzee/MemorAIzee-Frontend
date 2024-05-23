@@ -141,7 +141,7 @@ const deleteAlbum = async (albumId) => {
 
   try {
     const response = await fetch(
-      `https://api.memoraize.kr/api/album/${albumId}`,
+      `http://api.memoraize.kr:8080/api/album/${albumId}`,
       {
         method: 'DELETE',
         headers: {
@@ -190,7 +190,7 @@ const MyTravelog = ({ title = 'Travelog' }) => {
     // API 요청 보내기
     try {
       const response = await fetch(
-        `https://api.memoraize.kr/api/album/like/${albumId}`,
+        `http://api.memoraize.kr:8080/api/album/like/${albumId}`,
         {
           method: 'POST',
           headers: {
@@ -237,7 +237,7 @@ const MyTravelog = ({ title = 'Travelog' }) => {
 
     try {
       const response = await fetch(
-        `https://api.memoraize.kr/api/slideshow/${albumId}`,
+        `http://api.memoraize.kr:8080/api/slideshow/${albumId}`,
         {
           method: 'GET', // HTTP 메소드 설정
           headers: {
@@ -262,7 +262,9 @@ const MyTravelog = ({ title = 'Travelog' }) => {
     const fetchData = async () => {
       const authToken = localStorage.getItem('authToken');
       const userId = localStorage.getItem('userId');
-      const url = new URL(`https://api.memoraize.kr/api/album/users/${userId}`);
+      const url = new URL(
+        `http://api.memoraize.kr:8080/api/album/users/${userId}`
+      );
       const params = {
         sortStatus: '_POPULAR',
         page: 1,

@@ -296,7 +296,7 @@ const Template = () => {
       const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `https://api.memoraize.kr/api/album/${albumId}`,
+          `http://api.memoraize.kr:8080/api/album/${albumId}`,
           {
             method: 'GET',
             headers: {
