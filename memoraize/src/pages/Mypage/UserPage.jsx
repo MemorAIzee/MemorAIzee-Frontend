@@ -1,8 +1,7 @@
 import Header from '../../components/Header/Header';
 import styled from 'styled-components';
 import Profile from '../../assets/images/Rectangle.png';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MyTravelog from './MyTravelog';
 import MyReview from './MyReview';
 import { useParams } from 'react-router-dom';
@@ -47,14 +46,15 @@ const FollowButton = styled.button`
   width: 4.1vw;
   height: 2vw;
   border-radius: 4px;
-  background: var(--2, #5e81ff);
-  color: #fff;
+  background: ${(props) => (props.isFollowing ? '#e1e1e1' : '#5e81ff')};
+  color: ${(props) => (props.isFollowing ? '#000' : '#fff')};
   font-family: Pretendard;
   font-size: 0.8vw;
   font-style: normal;
   font-weight: 600;
   line-height: 24px;
   white-space: nowrap;
+  cursor: pointer;
 `;
 
 const ColumnContainer = styled.div`
@@ -116,6 +116,7 @@ const ProfileImage = styled.div`
 const Userpage = () => {
   const { id: userId } = useParams();
   const [profile, setProfile] = useState({});
+  const [canFollow, setCanFollow] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -138,6 +139,7 @@ const Userpage = () => {
 
         const data = await response.json();
         setProfile(data.result);
+        setCanFollow(data.result.can_follow); // Follow 상태를 초기화
         console.log(data);
       } catch (error) {
         console.error('Failed to fetch profile:', error);
@@ -146,6 +148,45 @@ const Userpage = () => {
 
     fetchProfile();
   }, [userId]); // userId를 의존성 배열로 추가
+
+  const handleFollow = async () => {
+    const authToken = localStorage.getItem('authToken');
+    const method = canFollow ? 'POST' : 'DELETE';
+
+    try {
+      const response = await fetch(
+        `https://api.memoraize.kr/api/user/follow/${userId}`,
+        {
+          method,
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(`${canFollow ? 'Follow' : 'Unfollow'} successful:`, data);
+      setCanFollow(!canFollow); // Follow/Unfollow 성공 시 상태 업데이트
+
+      // 팔로워 수를 즉시 업데이트
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        follower_count: canFollow
+          ? prevProfile.follower_count + 1
+          : prevProfile.follower_count - 1,
+      }));
+    } catch (error) {
+      console.error(
+        `Failed to ${canFollow ? 'follow' : 'unfollow'} user:`,
+        error
+      );
+    }
+  };
 
   return (
     <>
@@ -182,7 +223,9 @@ const Userpage = () => {
                   <ProfileIntro>{profile.user_introduction}</ProfileIntro>
                 </RowContainer>
               </ColumnContainer>
-              <FollowButton>팔로우</FollowButton>
+              <FollowButton onClick={handleFollow} isFollowing={!canFollow}>
+                {canFollow ? '팔로우' : '팔로잉'}
+              </FollowButton>
             </RowContainer>
           </RowContainer>
         </CreatesContainer>

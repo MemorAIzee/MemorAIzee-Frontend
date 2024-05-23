@@ -181,7 +181,7 @@ const Mypage = () => {
                   <ProfileIntro>{profile.user_introduction}</ProfileIntro>
                 </RowContainer>
               </ColumnContainer>
-              <FollowButton>팔로우</FollowButton>
+              {/* <FollowButton>팔로우</FollowButton> */}
             </RowContainer>
           </RowContainer>
         </CreatesContainer>
