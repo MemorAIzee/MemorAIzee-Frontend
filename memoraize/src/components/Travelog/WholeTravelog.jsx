@@ -361,15 +361,15 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
   };
 
   const handleLike = async (albumId, index) => {
-    // 로컬 상태를 먼저 업데이트
+
     const newHearts = [...hearts];
     newHearts[index] = !newHearts[index];
     setHearts(newHearts);
 
-    // authToken 가져오기
+
     const authToken = localStorage.getItem('authToken');
 
-    // API 요청 보내기
+  
     try {
       const response = await fetch(
         `https://api.memoraize.kr/api/album/like/${albumId}`,
