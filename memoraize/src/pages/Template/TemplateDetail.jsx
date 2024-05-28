@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Profile from '../../assets/images/profilepicture.png';
 import Logo from '../../assets/images/memorizelogo.png';
@@ -5,7 +6,6 @@ import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from '../../components/Map/Map';
 import Homes from '../../components/Map/Homes';
 import Image from '../../assets/images/albumimage.png';
-import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Backbutton from '../../assets/images/arrow-left2.png';
@@ -312,6 +312,13 @@ const TemplateDetail = () => {
         setAlbum(data.result);
         const color = toBrightPastelColor(data.result.photo_color_code);
         setBackgroundColor(color);
+
+        // Play the audio narration
+        if (data.result.narration_url) {
+          const audio = new Audio(data.result.narration_url);
+          audio.play();
+        }
+
         console.log(data);
       } catch (e) {
         console.error('Failed to fetch album data:', e);

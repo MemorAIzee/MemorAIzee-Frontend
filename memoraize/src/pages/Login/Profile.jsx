@@ -175,6 +175,7 @@ const DragDropArea = styled.div`
 
 const AudioPreview = styled.audio`
   margin-top: 2vw;
+  margin-bottom: 2vw;
   max-width: 100%; /* 오디오 플레이어의 최대 너비 설정 */
 `;
 

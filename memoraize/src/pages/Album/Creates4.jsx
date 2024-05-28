@@ -228,9 +228,9 @@ const Creates4 = () => {
     formData.append('albumInfo', albumInfo);
     formData.append('albumAccess', albumAccess);
 
-    // images.forEach((photo) => {
-    //   formData.append('images', photo.file);
-    // });
+    images.forEach((photo) => {
+      formData.append('images', photo.file);
+    });
 
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
