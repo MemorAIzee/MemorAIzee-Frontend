@@ -288,7 +288,7 @@ const Search = () => {
             <TitleContainer key={index} onClick={() => handleNavigate(item)}>
               <RoundImageContainer>
                 <RoundImage
-                  src={item.mainImg || Titleimage}
+                  src={item.profileImg || item.mainImg || Titleimage}
                   alt="Album Image"
                 />
               </RoundImageContainer>
@@ -296,7 +296,7 @@ const Search = () => {
               <ColumnContainer>
                 <TitleP>
                   {item.albumName ||
-                    item.reviewName ||
+                    item.context ||
                     item.placeName ||
                     item.userName}
                 </TitleP>
