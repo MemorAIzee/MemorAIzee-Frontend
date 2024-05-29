@@ -13,6 +13,7 @@ import HomeBanner from '../../assets/images/HomeBanner.png';
 import arrowIcon from '../../assets/images/arrow_12px2.png';
 import arrow_12px from '../../assets/images/arrow_12px.png';
 import Trash from '../../assets/images/trash-2.png';
+import PlayButton from '../../assets/images/Start.png';
 
 const StyledLink = styled(Link)`
   text-decoration: none; // 링크의 밑줄 제거
@@ -311,7 +312,7 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
   const [hearts, setHearts] = useState(new Array(6).fill(false));
 
   const [totalAlbums, setTotalAlbums] = useState(0);
-
+  const [slideshowUrl, setSlideshowUrl] = useState('');
   const [sortStatus, setSortStatus] = useState('_POPULAR');
   const [page, setPage] = useState(1); // 페이지 번호
   const [pageCount, setPageCount] = useState(9);
@@ -360,16 +361,42 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
     }
   };
 
-  const handleLike = async (albumId, index) => {
+  const handlePlaySlideshow = async (albumId) => {
+    const authToken = localStorage.getItem('authToken');
 
+    try {
+      const response = await fetch(
+        `https://api.memoraize.kr/api/slideshow/${albumId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        if (data.isSuccess) {
+          setSlideshowUrl(data.result); // Store the slideshow URL in state
+        }
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (e) {
+      console.error('Failed to fetch slideshow:', e);
+    }
+  };
+
+  const handleLike = async (albumId, index) => {
     const newHearts = [...hearts];
     newHearts[index] = !newHearts[index];
     setHearts(newHearts);
 
-
     const authToken = localStorage.getItem('authToken');
 
-  
     try {
       const response = await fetch(
         `https://api.memoraize.kr/api/album/like/${albumId}`,
@@ -498,9 +525,9 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
                         onClick={() => deleteAlbum(album.albumId)}
                       />
                       <img
-                        src={Share}
-                        style={{ width: '0.8vw', height: '0.9vw' }}
-                        alt="Share Icon"
+                        src={PlayButton}
+                        style={{ width: '1.75vw', cursor: 'pointer' }}
+                        onClick={() => handlePlaySlideshow(album.albumId)}
                       />
                     </IconContainer>
                   </TitleContainer>
@@ -516,6 +543,14 @@ const WholeTravelog = ({ title = 'Travelog' }) => {
               totalPages={totalPages}
               handlePageChange={handlePageChange}
             />
+          )}
+
+          {slideshowUrl && (
+            <div>
+              <a href={slideshowUrl} target="_blank" rel="noopener noreferrer">
+                View Slideshow
+              </a>
+            </div>
           )}
         </CreatesContainer>
       </Container>

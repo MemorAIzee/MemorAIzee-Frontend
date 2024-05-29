@@ -208,15 +208,15 @@ const ShareOption = styled.option``;
 
 const Creates4 = () => {
   const { albumName, albumInfo, images } = useAlbum();
-  const [albumAccess, setAlbumAccess] = useState('_PUBLIC');
+  const [albumAccess, setAlbumAccess] = useState('전체공개');
   const { setAlbumId } = useAlbum();
 
   const [isOpen, setIsOpen] = useState(false);
 
   const AlbumAccess = {
-    _PUBLIC: '_PUBLIC',
-    _PROTECTED: '_PROTECTED',
-    _PRIVATE: '_PRIVATE',
+    _PUBLIC: '전체공개',
+    _PROTECTED: '친구공개',
+    _PRIVATE: '비공개',
   };
 
   // const [albumAccess, setAlbumAccess] = useState(AlbumAccess.PUBLIC);
