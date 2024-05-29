@@ -10,6 +10,8 @@ import { Link, useParams } from 'react-router-dom';
 import keyframes from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import FadeInSection from './FadeInSection';
+import '../../App.css';
 
 const slideUp = keyframes`
   0% {
@@ -188,7 +190,6 @@ const BodyContainer = styled.div`
 
 const TripImageContainer = styled.div`
   margin-top: 8vw;
-  overflow: hidden;
   width: 100%;
 `;
 //albumId = 13
@@ -225,9 +226,11 @@ const InfoTextContainer = styled.div`
 
 const TravelContainer = styled.div`
   width: 100%;
-  height: 30vw;
+  height: 35vw;
   position: relative;
-  overflow: hidden;
+  border-radius: 1vw;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); // 그림자 설정
+  overflow: hidden; // 컨테이너를 넘어가는 부분을 숨김
 `;
 
 const OverlayButton = styled(Link)`
@@ -247,6 +250,7 @@ const OverlayButton = styled(Link)`
   font-weight: 300;
   font-size: 1vw;
 `;
+
 
 const imageVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -340,33 +344,43 @@ const Template = () => {
           </MapContainer>
 
           {album?.photo_list?.map((photo, index) => (
-            <TripImageContainer key={index}>
-              <InfoTextContainer>
-                <LocationName>{photo.location?.place_name}</LocationName>
-                <LocationNames>
-                  {photo.location?.date?.split('T')[0]}
-                  <br />
-                </LocationNames>
-              </InfoTextContainer>
-              <TravelContainer>
-                <img
-                  src={photo.photo_url}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '1vw',
-                  }}
-                />
-                <OverlayButton
-                  onClick={(e) => {
-                    e.preventDefault(); // 기본 이벤트 방지
-                    handleNavigation(photo.photo_id); // 현재 사진의 photo_id를 넘김
-                  }}
-                >
-                  더보기
-                </OverlayButton>
-              </TravelContainer>
-            </TripImageContainer>
+            
+              <TripImageContainer key={index}>
+                <FadeInSection>
+                <InfoTextContainer>
+                  <LocationName>{photo.location?.place_name}</LocationName>
+                  <LocationNames>
+                    {photo.location?.date?.split('T')[0]}
+                    <br />
+                  </LocationNames>
+                </InfoTextContainer>
+                <TravelContainer>
+                  <img
+                    src={photo.photo_url}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      objectFit: 'contain', // 이미지를 비율을 유지하면서 컨테이너를 채움
+                      objectPosition: 'center', // 이미지를 중앙에 배치
+                      position: 'absolute', // 부모 요소를 기준으로 절대 위치 설정
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)' // 중앙에 배치 
+                      
+                    }}
+                  />
+                  <OverlayButton
+                    onClick={(e) => {
+                      e.preventDefault(); // 기본 이벤트 방지
+                      handleNavigation(photo.photo_id); // 현재 사진의 photo_id를 넘김
+                    }}
+                  >
+                    더보기
+                  </OverlayButton>
+                </TravelContainer>
+                </FadeInSection>
+              </TripImageContainer>
+            
           ))}
         </BodyContainer>
       </MainConatiner>
