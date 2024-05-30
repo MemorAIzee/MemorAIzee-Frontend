@@ -241,18 +241,15 @@ const HashTag = styled.span`
 `;
 
 function toBrightPastelColor(hexColor) {
-  // Convert hex color to RGB
   let color = parseInt(hexColor.slice(1), 16);
   let red = (color >> 16) & 0xff;
   let green = (color >> 8) & 0xff;
   let blue = color & 0xff;
 
-  // Brighten the color
   red = Math.floor((red + 4 * 255) / 5);
   green = Math.floor((green + 4 * 255) / 5);
   blue = Math.floor((blue + 4 * 255) / 5);
 
-  // Convert RGB back to hex
   let brightPastelColor =
     '#' +
     ((1 << 24) + (red << 16) + (green << 8) + blue)
@@ -267,12 +264,12 @@ const TemplateDetail = () => {
   const [album, setAlbum] = useState(null);
   const { photoId } = useParams();
   const [backgroundColor, setBackgroundColor] = useState('RGB(243, 246, 254)');
+  const [audio, setAudio] = useState(null);
+  const navigate = useNavigate();
 
   const DetailText = ({ dateString }) => {
-    // Convert ISO string to Date object
     const date = new Date(dateString);
 
-    // Format the date to Korean timezone
     const formattedDate = date
       .toLocaleString('ko-KR', {
         timeZone: 'Asia/Seoul',
@@ -313,26 +310,46 @@ const TemplateDetail = () => {
         const color = toBrightPastelColor(data.result.photo_color_code);
         setBackgroundColor(color);
 
-        // Play the audio narration
         if (data.result.narration_url) {
-          const audio = new Audio(data.result.narration_url);
-          audio.play();
+          const audioObj = new Audio(data.result.narration_url);
+          setAudio(audioObj);
+          audioObj.play();
         }
-
-        console.log(data);
       } catch (e) {
         console.error('Failed to fetch album data:', e);
       }
     };
 
     fetchData();
+
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
   }, [photoId]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [audio]);
 
   return (
     <>
       <MainContainer bgColor={backgroundColor}>
         <HeaderContainer>
-          <ImageContainer>
+          <ImageContainer onClick={() => navigate(-1)}>
             <img src={Backbutton} style={{ width: '1.6vw', height: '1.6vw' }} />
           </ImageContainer>
           <img src={Logo} style={{ width: '4vw', height: '4vw' }} />

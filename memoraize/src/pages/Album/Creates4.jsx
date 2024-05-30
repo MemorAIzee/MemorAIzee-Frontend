@@ -3,9 +3,9 @@ import Header from '../../components/Header/Header';
 import CreateBanner from '../../assets/images/CreateBanner.png';
 import CircleLine from '../../assets/images/creates4.png';
 import { useNavigate } from 'react-router-dom';
-import Photocamera from '../../assets/images/Photo camera.png';
 import { useState } from 'react';
 import { useAlbum } from '../../AlbumContext/AlbumContext';
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -39,24 +39,6 @@ const CreateContainer = styled.div`
   margin-top: 7.5vw;
   display: flex;
   flex-direction: column;
-`;
-
-const PhotoIcon = styled.img`
-  cursor: pointer; /* 클릭 가능한 아이콘 표시 */
-  width: 1.6vw;
-  height: 1.6vw;
-`;
-
-const AlbumField = styled.input``;
-
-const RequiredText = styled.p`
-  color: var(--5, #707070);
-  font-family: Pretendard;
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  margin-left: 0.5vw;
 `;
 
 const CancelButton = styled.button`
@@ -97,15 +79,6 @@ const ButtonContainer = styled.div`
   margin-top: 4.5vw;
 `;
 
-const PhotoSelectText = styled.p`
-  color: var(--3, #a0a0a0);
-  font-family: Pretendard;
-  font-size: 1vw;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-`;
-
 const HiddenFileInput = styled.input`
   display: none;
 `;
@@ -127,6 +100,7 @@ const ShareSelect = styled.select`
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='11' viewBox='0 0 16 11' fill='none'%3E%3Cpath d='M1.88 0L8 6.19788L14.12 0L16 1.90808L8 10.0276L0 1.90808L1.88 0Z' fill='%23707070'/%3E%3C/svg%3E")
     no-repeat right 1vw center;
 `;
+
 const DropdownContainer = styled.div`
   position: relative;
   width: 42.4vw;
@@ -204,22 +178,17 @@ const TextContainer = styled.div`
   justify-content: center;
 `;
 
-const ShareOption = styled.option``;
+const AlbumAccess = {
+  _PUBLIC: '전체공개',
+  _PROTECTED: '친구공개',
+  _PRIVATE: '비공개',
+};
 
 const Creates4 = () => {
   const { albumName, albumInfo, images } = useAlbum();
-  const [albumAccess, setAlbumAccess] = useState('전체공개');
+  const [albumAccess, setAlbumAccess] = useState('_PUBLIC');
   const { setAlbumId } = useAlbum();
-
   const [isOpen, setIsOpen] = useState(false);
-
-  const AlbumAccess = {
-    _PUBLIC: '전체공개',
-    _PROTECTED: '친구공개',
-    _PRIVATE: '비공개',
-  };
-
-  // const [albumAccess, setAlbumAccess] = useState(AlbumAccess.PUBLIC);
 
   const submitAlbum = async () => {
     const formData = new FormData();
@@ -274,7 +243,7 @@ const Creates4 = () => {
   };
 
   const handleSelectShareOption = (option) => {
-    setAlbumAccess(AlbumAccess[option]); // 상태 업데이트 함수 이름 변경
+    setAlbumAccess(option); // 상태 업데이트 함수 이름 변경
     setIsOpen(false); // 드롭다운 메뉴 닫기
   };
 
@@ -294,7 +263,7 @@ const Creates4 = () => {
             <NameText>앨범 공유 범위</NameText>
             <DropdownContainer>
               <DropdownButton onClick={() => setIsOpen(!isOpen)}>
-                <span>{albumAccess}</span>{' '}
+                <span>{AlbumAccess[albumAccess]}</span>
               </DropdownButton>
               {isOpen && (
                 <DropdownMenu>
