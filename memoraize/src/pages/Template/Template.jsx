@@ -229,7 +229,7 @@ const TravelContainer = styled.div`
   height: 35vw;
   position: relative;
   border-radius: 1vw;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); // 그림자 설정
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); // 그림자 설정
   overflow: hidden; // 컨테이너를 넘어가는 부분을 숨김
 `;
 
