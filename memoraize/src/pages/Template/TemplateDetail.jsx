@@ -12,7 +12,6 @@ import Backbutton from '../../assets/images/arrow-left2.png';
 import FadeInSection from './FadeInSection';
 import '../../App.css';
 
-
 const slideUp = keyframes`
   0% {
     transform: translateY(100%);
@@ -37,7 +36,7 @@ const popUp = keyframes`
 
 const MainContainer = styled.div`
   width: 100%;
-  height: 200%;
+  height: auto; /* Change height to auto */
   background-color: ${({ bgColor }) => bgColor || '#cce6f7'};
   justify-content: flex-start;
   display: flex;
@@ -114,7 +113,6 @@ const ColumnContainer = styled.div`
   margin-left: 15vw;
   text-align: center;
   justify-content: center;
-  height: 75vw;
 `;
 
 const BodyContainer = styled.div`
@@ -181,13 +179,12 @@ const OverlayButton = styled(Link)`
 const ContentContainer = styled.div`
   margin-top: 5vw;
   width: 100%;
-  max-height: 15vw;
 `;
 
 const ImageContainer2 = styled.div`
   margin-top: 5vw;
   width: 100%;
-  height: 30vw;
+  height: auto; /* Change height to auto */
   margin-right: 5vw;
   margin-bottom: 10vw;
 `;
@@ -361,54 +358,54 @@ const TemplateDetail = () => {
 
         {album && (
           <>
-          <BodyContainer>
-            <FadeInSection>
-              <TextContainer>
-                <Texts>{album.photo_title || 'No title'}</Texts>
-              </TextContainer>
+            <BodyContainer>
+              <FadeInSection>
+                <TextContainer>
+                  <Texts>{album.photo_title || 'No title'}</Texts>
+                </TextContainer>
 
-              <ContentContainer>
-                <Texts2>{album.photo_comment}</Texts2>
-              </ContentContainer>
+                <ContentContainer>
+                  <Texts2>{album.photo_comment}</Texts2>
+                </ContentContainer>
               </FadeInSection>
             </BodyContainer>
 
             <ColumnContainer>
               <ImageContainer2>
                 <FadeInSection>
-                <img
-                  src={album.photo_url}
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    borderRadius: '1vw',
-                    marginBottom: '5vw',
-                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)', // box-shadow 속성 추가
-                  }}
-                />
+                  <img
+                    src={album.photo_url}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '1vw',
+                      marginBottom: '5vw',
+                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)', // box-shadow 속성 추가
+                    }}
+                  />
                 </FadeInSection>
               </ImageContainer2>
               <InforContainer>
                 <DetailtextContainer>
-                <FadeInSection>
-                  <ExplainContainer>
-                    <LocationNames>Location:</LocationNames>
-                    <DetailTexts>
-                      {album.location.place_name || 'Unknown Location'}
-                    </DetailTexts>
-                  </ExplainContainer>
-                  <ExplainContainer>
-                    <LocationNames>Date:</LocationNames>
-                    <DetailText dateString={album.location.date} />
-                  </ExplainContainer>
-                  <ExplainContainer>
-                    <LocationNames>Hash Tags:</LocationNames>
-                    <HashTagContainer>
-                      {album.hashTage_list.map((hashtag, index) => (
-                        <HashTag key={index}>{hashtag.tag_name}</HashTag>
-                      ))}
-                    </HashTagContainer>
-                  </ExplainContainer>
+                  <FadeInSection>
+                    <ExplainContainer>
+                      <LocationNames>Location:</LocationNames>
+                      <DetailTexts>
+                        {album.location.place_name || 'Unknown Location'}
+                      </DetailTexts>
+                    </ExplainContainer>
+                    <ExplainContainer>
+                      <LocationNames>Date:</LocationNames>
+                      <DetailText dateString={album.location.date} />
+                    </ExplainContainer>
+                    <ExplainContainer>
+                      <LocationNames>Hash Tags:</LocationNames>
+                      <HashTagContainer>
+                        {album.hashTage_list.map((hashtag, index) => (
+                          <HashTag key={index}>{hashtag.tag_name}</HashTag>
+                        ))}
+                      </HashTagContainer>
+                    </ExplainContainer>
                   </FadeInSection>
                 </DetailtextContainer>
               </InforContainer>
