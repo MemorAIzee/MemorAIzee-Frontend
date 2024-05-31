@@ -9,6 +9,9 @@ import Image from '../../assets/images/albumimage.png';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Backbutton from '../../assets/images/arrow-left2.png';
+import FadeInSection from './FadeInSection';
+import '../../App.css';
+
 
 const slideUp = keyframes`
   0% {
@@ -34,7 +37,7 @@ const popUp = keyframes`
 
 const MainContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: 200%;
   background-color: ${({ bgColor }) => bgColor || '#cce6f7'};
   justify-content: flex-start;
   display: flex;
@@ -111,11 +114,12 @@ const ColumnContainer = styled.div`
   margin-left: 15vw;
   text-align: center;
   justify-content: center;
-  height: 50vw;
+  height: 75vw;
 `;
 
 const BodyContainer = styled.div`
   width: 55%;
+  height: auto;
   display: flex;
   margin-left: 15vw;
   flex-direction: column;
@@ -357,7 +361,8 @@ const TemplateDetail = () => {
 
         {album && (
           <>
-            <BodyContainer>
+          <BodyContainer>
+            <FadeInSection>
               <TextContainer>
                 <Texts>{album.photo_title || 'No title'}</Texts>
               </TextContainer>
@@ -365,21 +370,27 @@ const TemplateDetail = () => {
               <ContentContainer>
                 <Texts2>{album.photo_comment}</Texts2>
               </ContentContainer>
+              </FadeInSection>
             </BodyContainer>
 
             <ColumnContainer>
               <ImageContainer2>
+                <FadeInSection>
                 <img
                   src={album.photo_url}
                   style={{
                     width: '100%',
-                    height: '38vw',
+                    height: 'auto',
                     borderRadius: '1vw',
+                    marginBottom: '5vw',
+                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)', // box-shadow 속성 추가
                   }}
                 />
+                </FadeInSection>
               </ImageContainer2>
               <InforContainer>
                 <DetailtextContainer>
+                <FadeInSection>
                   <ExplainContainer>
                     <LocationNames>Location:</LocationNames>
                     <DetailTexts>
@@ -398,6 +409,7 @@ const TemplateDetail = () => {
                       ))}
                     </HashTagContainer>
                   </ExplainContainer>
+                  </FadeInSection>
                 </DetailtextContainer>
               </InforContainer>
             </ColumnContainer>
