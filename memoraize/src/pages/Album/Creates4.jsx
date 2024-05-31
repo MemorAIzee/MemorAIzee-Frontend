@@ -67,6 +67,9 @@ const SubmitButton = styled.button`
   font-style: normal;
   font-weight: 600;
   line-height: 1.2vw;
+  &:disabled {
+    background: #3a5bbf; /* 더 진한 색상 */
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -189,8 +192,13 @@ const Creates4 = () => {
   const [albumAccess, setAlbumAccess] = useState('_PUBLIC');
   const { setAlbumId } = useAlbum();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submitAlbum = async () => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     const formData = new FormData();
 
     formData.append('albumName', albumName);
@@ -200,10 +208,6 @@ const Creates4 = () => {
     images.forEach((photo) => {
       formData.append('images', photo.file);
     });
-
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
 
     const authToken = localStorage.getItem('authToken');
 
@@ -217,11 +221,9 @@ const Creates4 = () => {
       });
 
       if (!response.ok) {
-        // 응답이 성공적이지 않으면 오류를 발생시킵니다.
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // JSON 형식의 응답을 파싱합니다.
       const data = await response.json();
       console.log('Submission successful:', data);
 
@@ -243,8 +245,8 @@ const Creates4 = () => {
   };
 
   const handleSelectShareOption = (option) => {
-    setAlbumAccess(option); // 상태 업데이트 함수 이름 변경
-    setIsOpen(false); // 드롭다운 메뉴 닫기
+    setAlbumAccess(option);
+    setIsOpen(false);
   };
 
   return (
@@ -281,7 +283,13 @@ const Creates4 = () => {
           </CreateContainer>
           <ButtonContainer>
             <CancelButton onClick={goToCreates3}>취소하기</CancelButton>
-            <SubmitButton onClick={submitAlbum}>앨범 생성하기</SubmitButton>
+            <SubmitButton
+              onClick={submitAlbum}
+              disabled={isSubmitting}
+              style={isSubmitting ? { backgroundColor: '#3a5bbf' } : {}}
+            >
+              앨범 생성하기
+            </SubmitButton>
           </ButtonContainer>
         </CreatesContainer>
       </Container>
