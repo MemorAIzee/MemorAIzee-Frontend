@@ -1,10 +1,10 @@
 import Header from '../../components/Header/Header';
 import styled from 'styled-components';
 import Profile from '../../assets/images/Rectangle.png';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MyTravelog from './MyTravelog';
 import MyReview from './MyReview';
+import { useNavigate } from 'react-router-dom';
 
 const MypageContainer = styled.div`
   width: 100%;
@@ -54,6 +54,26 @@ const FollowButton = styled.button`
   font-weight: 600;
   line-height: 24px;
   white-space: nowrap;
+`;
+
+const EditProfileButton = styled.button`
+  display: inline-flex;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 6vw;
+  height: 2vw;
+  border-radius: 4px;
+  background: #5e81ff;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  white-space: nowrap;
+  margin-top: 1vw;
 `;
 
 const ColumnContainer = styled.div`
@@ -114,6 +134,7 @@ const ProfileImage = styled.div`
 
 const Mypage = () => {
   const [profile, setProfile] = useState({});
+  const navigate = useNavigate();
   const userId = 'test';
 
   useEffect(() => {
@@ -145,6 +166,10 @@ const Mypage = () => {
 
     fetchProfile();
   }, []); // 빈 배열을 의존성 배열로 추가
+
+  const handleEditProfile = () => {
+    navigate('/Profile');
+  };
 
   return (
     <>
@@ -180,6 +205,9 @@ const Mypage = () => {
                 <RowContainer style={{ marginTop: '1vw' }}>
                   <ProfileIntro>{profile.user_introduction}</ProfileIntro>
                 </RowContainer>
+                <EditProfileButton onClick={handleEditProfile}>
+                  프로필 수정하기
+                </EditProfileButton>
               </ColumnContainer>
               {/* <FollowButton>팔로우</FollowButton> */}
             </RowContainer>
