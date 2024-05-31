@@ -249,6 +249,7 @@ const Travelog = ({ title = 'Travelog' }) => {
         console.log(data);
         if (data.isSuccess) {
           setSlideshowUrl(data.result); // Store the slideshow URL in state
+          window.location.reload();
         }
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -345,13 +346,13 @@ const Travelog = ({ title = 'Travelog' }) => {
             </Album>
           ))}
         </AlbumContainer>
-        {slideshowUrl && (
+        {/* {slideshowUrl && (
           <div>
             <a href={slideshowUrl} target="_blank" rel="noopener noreferrer">
               View Slideshow
             </a>
           </div>
-        )}
+        )} */}
       </CreatesContainer>
     </>
   );
